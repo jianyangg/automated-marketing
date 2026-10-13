@@ -1,0 +1,40 @@
+# Only these framework locations are public. New top-level files stay local
+# until deliberately allowlisted here. Add future source/config roots explicitly.
+/*
+!/.gitignore
+!/AGENTS.md
+!/README.md
+!/LICENSE
+!/docs/
+!/prompts/
+!/templates/
+!/examples/
+!/brands/
+
+# Owner workspaces are private; distributable fixtures live in examples/.
+/brands/*
+!/brands/.gitkeep
+/.marketing/
+/private/
+/backups/
+/exports/
+/var/
+/logs/
+
+# Credentials and local configuration
+.env
+.env.*
+*.pem
+*.key
+*.p12
+.codex/
+
+# Development and runtime artifacts
+node_modules/
+dist/
+coverage/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+.DS_Store
