@@ -20,7 +20,15 @@ Keep business-specific files inside `brands/`; Git excludes them from the public
 
 ## Dashboard
 
-With Node.js 22+, run `npm run dashboard` and open the printed local URL. No install or build step. See goal metrics, progress charts, the next move, and what past evidence changes; continue in Codex to act. [Dashboard guide](docs/dashboard.md).
+See your key numbers, progress, next move, and lessons learned. Ask Codex: **“Open my dashboard.”**
+
+**Make it yours.** No coding knowledge needed—tell Codex what you want to see:
+
+> Edit mode: Customize my dashboard. Put my most important numbers first, show weekly progress, and use my brand colours.
+
+Codex handles the changes. Keep asking for adjustments until it feels right. For everyday marketing, say **“Use mode.”**
+
+Prefer the terminal? Run `npm run dashboard` with Node.js 22+. [Dashboard guide](docs/dashboard.md).
 
 ## Two modes
 
