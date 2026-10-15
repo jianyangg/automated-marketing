@@ -1,6 +1,6 @@
 # Delivery plan and release gates
 
-Specification, October 13, 2026. This document defines future implementation evidence; none of the planned runtime, connector, or clean-machine tests has passed merely because it is listed here. Root agent guidelines and instruction-only workflow prompts are supplied; they support manual work without proving the runtime.
+Specification, October 13, 2026. This document defines future execution-runtime evidence; listing a test does not mean it passed. Root guidelines and workflows support manual work. The [read-only dashboard](dashboard.md), added October 15, supplies local file-based oversight; the transactional execution runtime remains unimplemented.
 
 ## 1. Product assessment
 

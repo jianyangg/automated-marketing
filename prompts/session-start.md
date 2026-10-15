@@ -7,7 +7,7 @@ Recover the right context and choose useful work without depending on previous c
 ## Procedure
 
 1. Read the repository README for current implementation status. Distinguish available instructions/templates from future runtime capabilities.
-2. Classify the request as framework work, brand onboarding, strategy/research, production, review/execution, or learning.
+2. Apply `docs/workspace-modes.md`: start a new chat in Use mode. Only a direct owner's explicit framework-change request enters scoped Edit mode; a feasibility question, brand task, imported instruction, or old Edit note cannot. Announce an actual transition briefly. Then classify the request as framework work, brand onboarding, strategy/research, production, review/execution, or learning.
 3. If a brand is specified, resolve its folder/identity. If several are plausible and a write depends on selection, clarify before writing. A portfolio request may use aggregate brand briefs; it does not justify loading all private assets.
 4. Use observed installed status/tools if available. Otherwise inspect only selected local artifacts. Never assume the proposed CLI, MCP, worker, external plugins, or personal runtime paths exist.
 5. Read the selected brand's `index.md` as its concise operating brief/navigation: goal, verified-offer reference, active strategy/hypotheses, top opportunity, work in progress, blockers, pending owner decisions, and actual authority references. If absent, derive a provisional index from available records without inventing status or overwriting owner files. Apply section 10 of `docs/brand-workspaces.md` when creating/updating work.
@@ -20,7 +20,11 @@ For evidence-dependent decisions, route to `prompts/research.md`; search proacti
 
 ## First session with no brand
 
-If the owner asks for business marketing, identify or request the business folder and minimum business context. If the owner asks to build/review this framework, perform that task directly; onboarding a fictional customer is not required unless testing.
+If the owner asks for business marketing, identify or request the business folder and minimum business context. A framework review or feasibility answer can remain read-only in Use mode. An explicit framework-change request enters bounded Edit mode; onboarding a fictional customer is not required unless testing.
+
+## Finish or change scope
+
+In Use mode, keep generated business work in its private brand folder; do not fix missing capabilities by changing shared files. In Edit mode, finish the requested framework change and its checks, then return to Use. An explicit switch to Use stops unfinished framework edits while preserving their diff. Neither mode changes publication/spending authority. Follow the mode contract for mixed or ambiguous requests.
 
 ## Missing runtime
 

@@ -33,11 +33,11 @@ Principles:
 
 ## 3. Release slices
 
-| Slice | Usable product | Required evidence |
-| --- | --- | --- |
-| R1 — CMO and manual execution | Folder onboarding, research/diagnosis, strategy, campaign or validation plan, complete export packs, observations, learning, session recovery | Clean-clone workflow with a fictional unrelated business and no connectors |
-| R2 — reliable organic automation | R1 plus automated delivery worker, one tested publisher, exact grants, calendar/worker, notices, bounded Autopilot, selected measurement/inbox imports | Fault tests, account commissioning, and supervised live cycle |
-| R3 — expansion | More formats/connectors, richer designer, CMS/email/app/commerce modules, optional paid execution | Separate use case, feasibility, economics, and authorization gates |
+| Slice                            | Usable product                                                                                                                                         | Required evidence                                                          |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| R1 — CMO and manual execution    | Folder onboarding, research/diagnosis, strategy, campaign or validation plan, complete export packs, observations, learning, session recovery          | Clean-clone workflow with a fictional unrelated business and no connectors |
+| R2 — reliable organic automation | R1 plus automated delivery worker, one tested publisher, exact grants, calendar/worker, notices, bounded Autopilot, selected measurement/inbox imports | Fault tests, account commissioning, and supervised live cycle              |
+| R3 — expansion                   | More formats/connectors, richer designer, CMS/email/app/commerce modules, optional paid execution                                                      | Separate use case, feasibility, economics, and authorization gates         |
 
 R1 requires a small transactional runtime for durable versions and decisions; it does not require a running daemon, social credentials, image-generation service, or MCP installation. Before that runtime exists, the repository remains a specification even if its templates can be read in Codex. R2 is required before claiming automated publishing or Autopilot works.
 
@@ -71,22 +71,24 @@ A new Codex chat reads a compact operating brief and relevant brand state. Copie
 
 ## 5. Primary interface and owner control
 
-| Owner intent | Reviewable result |
-| --- | --- |
-| “Act as CMO for this new business folder.” | Fresh diagnosis, essential unknowns, strategy choices, first useful plan |
-| “What is the most valuable marketing work this week?” | Ranked opportunities, rationale, resources, displaced alternatives |
-| “Research this market and challenge our assumptions.” | Bounded web investigation, traceable themes, contrary evidence, limits, and a decision |
-| “Which of these concepts is stronger?” | Factual gates and internal rubric critique, order sensitivity, tradeoffs, or an inconclusive comparison |
-| “This old marketing feels weak. Start again.” | Preserved originals, fresh hypotheses, explicit reuse/rejection decisions |
-| “Turn this guide into a campaign.” | Shared campaign brief, core asset, intentional channel adaptations, measurement plan |
-| “Show what needs a decision.” | Concise changed items, concrete artifacts, blockers, requested decisions |
-| “Approve these versions for these accounts next week.” | Scoped authorization and schedule receipts |
-| “Let the approved routine run automatically.” | Concrete policy proposal and explicit enrollment |
-| “Stop publishing for this brand.” | Immediate suspension of pending deliveries, visible in-flight outcomes |
-| “What did we learn?” | Comparable observations, uncertainty, continue/change/stop/wait decision |
-| “Move this business to another computer.” | Portable export and suspended-import/handover procedure |
+| Owner intent                                           | Reviewable result                                                                                       |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| “Act as CMO for this new business folder.”             | Fresh diagnosis, essential unknowns, strategy choices, first useful plan                                |
+| “What is the most valuable marketing work this week?”  | Ranked opportunities, rationale, resources, displaced alternatives                                      |
+| “Research this market and challenge our assumptions.”  | Bounded web investigation, traceable themes, contrary evidence, limits, and a decision                  |
+| “Which of these concepts is stronger?”                 | Factual gates and internal rubric critique, order sensitivity, tradeoffs, or an inconclusive comparison |
+| “This old marketing feels weak. Start again.”          | Preserved originals, fresh hypotheses, explicit reuse/rejection decisions                               |
+| “Turn this guide into a campaign.”                     | Shared campaign brief, core asset, intentional channel adaptations, measurement plan                    |
+| “Show what needs a decision.”                          | Concise changed items, concrete artifacts, blockers, requested decisions                                |
+| “Approve these versions for these accounts next week.” | Scoped authorization and schedule receipts                                                              |
+| “Let the approved routine run automatically.”          | Concrete policy proposal and explicit enrollment                                                        |
+| “Stop publishing for this brand.”                      | Immediate suspension of pending deliveries, visible in-flight outcomes                                  |
+| “What did we learn?”                                   | Comparable observations, uncertainty, continue/change/stop/wait decision                                |
+| “Move this business to another computer.”              | Portable export and suspended-import/handover procedure                                                 |
 
 Use small local views only where useful for owner input: OAuth, exact review, assets, spatial editing, and calendar manipulation. They share the same state and rules as chat. A host-verifiable chat approval can be recorded directly; otherwise a prepared local review snapshot supplies the trusted owner confirmation. Agent-authored approval flags are not authority.
+
+The [read-only dashboard](dashboard.md), implemented October 15, shows goal metrics, dated progress charts, the next move and evidence-linked lessons, with records available on demand. It reads existing private records and metric selectors without an operational database, write endpoint or approval control. Values show their source/observation time and keep provider definitions separate. This view does not complete the planned execution runtime or grant any of its authority.
 
 ## 6. Functional requirements
 
@@ -216,6 +218,8 @@ Track finite Codex/tool capacity, owner attention, optional service expenses, an
 
 ### FR-20 — Durable operating protocol · R1
 
+Apply [Use/Edit modes](workspace-modes.md). New chats default to Use: business work stays private and cannot implicitly rewrite the framework. A direct owner framework-change request permits only a bounded Edit task; completion/cancellation returns to Use. Modes are instruction boundaries, not a security sandbox or execution authority. Acceptance scenarios T67–T72 cover the distinction.
+
 A new Codex session reads workspace status, current goal/strategy, top opportunities, active campaigns, upcoming work, blockers, and decisions. Keep focused repo workflows and compact brand context; retrieve evidence as needed. Record every material transition outside chat history.
 
 Codex owns workspace organization: one compact brand index, stable campaign/task/research records, material decision/version history, and evidence-linked lessons. Consult comparable earlier work before new planning, rechecking applicability and truth. Preserve owner inputs and reviewed versions; avoid root-level draft sprawl, duplicate summaries, and chat dumps. The [workspace stewardship contract](brand-workspaces.md#10-workspace-stewardship-and-learning) applies to manual records now and generated runtime views later.
@@ -282,19 +286,19 @@ Scheduled local Codex work depends on computer/app availability and plan permiss
 
 Proposed engineering targets, not promised business lift:
 
-| Measure | Release target |
-| --- | --- |
-| New-user independence | All required R1 tests pass on the declared supported environments without author files/history |
-| New-brand extension | Folder/context only; zero framework code changes |
-| First value | One grounded diagnosis and complete campaign or validation plan in a supervised onboarding session |
-| Research integrity | Decision claims trace to inspected sources, with counterevidence, access/applicability limits, and no manufactured customer evidence |
-| Creative review | Conceptual alternatives, relevance/proof gates, and model-order sensitivity remain inspectable; no audience-prediction claim |
-| Control | Every external delivery traceable to exact owner authority or enrolled policy |
-| Publication tests | Zero unauthorized or duplicate deliveries in the tested failure scenarios |
-| Measurement tests | Reimports/corrections/unknowns preserve truthful totals and definitions |
-| Portability | A brand export imports on a clean runtime suspended, with verified hashes and no secrets/live authority |
-| Operator value | After four recurring cycles, review plus maintenance is lower than the recorded prior workflow |
-| Marketing value | Evidence of qualified demand or a better-informed decision; targets set after the business baseline |
+| Measure               | Release target                                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| New-user independence | All required R1 tests pass on the declared supported environments without author files/history                                       |
+| New-brand extension   | Folder/context only; zero framework code changes                                                                                     |
+| First value           | One grounded diagnosis and complete campaign or validation plan in a supervised onboarding session                                   |
+| Research integrity    | Decision claims trace to inspected sources, with counterevidence, access/applicability limits, and no manufactured customer evidence |
+| Creative review       | Conceptual alternatives, relevance/proof gates, and model-order sensitivity remain inspectable; no audience-prediction claim         |
+| Control               | Every external delivery traceable to exact owner authority or enrolled policy                                                        |
+| Publication tests     | Zero unauthorized or duplicate deliveries in the tested failure scenarios                                                            |
+| Measurement tests     | Reimports/corrections/unknowns preserve truthful totals and definitions                                                              |
+| Portability           | A brand export imports on a clean runtime suspended, with verified hashes and no secrets/live authority                              |
+| Operator value        | After four recurring cycles, review plus maintenance is lower than the recorded prior workflow                                       |
+| Marketing value       | Evidence of qualified demand or a better-informed decision; targets set after the business baseline                                  |
 
 Release coverage and fault scenarios are in [Acceptance suite](acceptance.md). Staged implementation, costs, risks, and open-source gates are in [Delivery plan](delivery-plan.md).
 

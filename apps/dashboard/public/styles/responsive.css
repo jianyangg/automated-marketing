@@ -1,0 +1,170 @@
+@media (max-width: 1000px) {
+  .progress-grid {
+    grid-template-columns: 1.5fr 1fr;
+  }
+  .shell {
+    padding: 0 24px 35px;
+  }
+  .panel {
+    padding: 19px;
+  }
+  .metric-select {
+    padding: 16px;
+  }
+  .metric-details {
+    padding: 10px 16px;
+  }
+  .trend-panel .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .trend-panel .section-heading select {
+    max-width: 100%;
+    width: 100%;
+  }
+  .next-panel h2 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .progress-grid {
+    grid-template-columns: 1fr;
+  }
+  .trend-panel .section-heading {
+    flex-direction: row;
+    align-items: center;
+  }
+  .trend-panel .section-heading select {
+    width: auto;
+    max-width: 50%;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .next-panel details {
+    margin-top: 12px;
+  }
+  .learning-table thead {
+    display: none;
+  }
+  .learning-table,
+  .learning-table tbody,
+  .learning-table tr,
+  .learning-table td {
+    display: block;
+  }
+  .learning-table tr {
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+  }
+  .learning-table td {
+    border: 0;
+    padding: 0 0 12px;
+    width: 100%;
+  }
+  .learning-table td:last-child {
+    padding: 0;
+  }
+  .learning-table td:not(:first-child)::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+}
+@media (max-width: 460px) {
+  .shell {
+    padding: 0 16px 30px;
+  }
+  .topbar {
+    height: 64px;
+  }
+  .business-picker {
+    gap: 6px;
+  }
+  .business-picker > span {
+    display: none;
+  }
+  .business-picker select {
+    max-width: 220px;
+  }
+  .page-heading {
+    margin-top: 23px;
+  }
+  h1 {
+    font-size: 25px;
+  }
+  .metric-select {
+    grid-template-columns: 1fr;
+    min-height: 145px;
+    gap: 6px;
+  }
+  .metric-value {
+    font-size: 35px;
+  }
+  .metric-label {
+    min-height: 32px;
+  }
+  .sparkline {
+    max-width: 100%;
+    height: 26px;
+  }
+  .metric-details {
+    padding: 9px 12px;
+  }
+  .metric-select {
+    padding: 14px 12px;
+  }
+  .metric-period {
+    font-size: 10px;
+  }
+  .section-heading {
+    gap: 10px;
+  }
+  .trend-panel .section-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .trend-panel .section-heading select {
+    max-width: none;
+  }
+  .line-chart {
+    min-height: 170px;
+  }
+  .chart-note {
+    font-size: 11px;
+  }
+  .chart-caption {
+    align-items: start;
+    gap: 8px;
+  }
+  .chart-empty {
+    padding: 20px 10px;
+    min-height: 200px;
+  }
+  .panel {
+    padding: 17px;
+  }
+  .next-panel h2 {
+    font-size: 21px;
+  }
+  dialog {
+    padding: 19px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  button,
+  a {
+    transition:
+      color 0.12s,
+      background 0.12s;
+  }
+}

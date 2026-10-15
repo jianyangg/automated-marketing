@@ -1,6 +1,6 @@
 # Architecture and operating contracts
 
-Proposed implementation, October 13, 2026. Tool names and paths below define software to build; they are not installed commands.
+Proposed execution architecture, October 13, 2026. The [read-only local dashboard](dashboard.md) is implemented separately in `apps/dashboard/`: dependency-free Node.js, private brand files and no execution endpoints. The runtime, CLI, MCP, worker, database and connector contracts below remain proposed software, not installed capabilities.
 
 ## 1. System boundary
 

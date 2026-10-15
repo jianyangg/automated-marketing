@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "metrics": [
+    {
+      "label": "Appointment requests",
+      "source": "reports/observations.json",
+      "selector": {
+        "pointer": "/appointmentRequests"
+      },
+      "observedAtPointer": "/observedAt",
+      "period": "No observation window yet",
+      "note": "Fictional example. No bookings measured.",
+      "id": "requests",
+      "role": "outcome"
+    },
+    {
+      "label": "Repeat bookings",
+      "source": "reports/observations.json",
+      "selector": {
+        "pointer": "/repeatBookings"
+      },
+      "observedAtPointer": "/observedAt",
+      "period": "No observation window yet",
+      "note": "Unknown is different from zero.",
+      "id": "repeat"
+    }
+  ],
+  "goalLabel": "More appointment requests"
+}

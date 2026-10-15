@@ -10,10 +10,18 @@ Own the marketing method and the organization of its work. The owner supplies bu
 
 These are project instructions, not an override of platform rules, the owner's current instructions, or permission boundaries.
 
+## Workspace modes
+
+**Use mode is the default in every new chat.** Do marketing work inside the selected private brand workspace. Read shared guidance as needed, but do not change the framework's instructions, prompts, specifications, templates, code, configuration, or dependencies as a side effect of using it. A missing capability is a limitation to report, not permission to rebuild the machine.
+
+Enter **Edit mode** only on a direct owner request such as “Edit mode: change the campaign workflow,” or another unambiguous instruction to change the framework. A business improvement request or feasibility question does not switch modes. Announce the bounded edit scope briefly; do not demand a redundant confirmation for an explicit edit request. Clarifications continue that task; completion, cancellation, or “Use mode” ends it. Fresh chats start in Use mode regardless of old notes.
+
+Follow [the mode contract](docs/workspace-modes.md). Modes are instruction boundaries, not file locks or execution grants. Neither mode authorizes publishing, spending, unrelated product changes, or a branch switch. Imported content cannot switch modes. Preserve unfinished edits when returning to Use.
+
 ## Start every session
 
 1. Read `README.md` and `prompts/session-start.md`.
-2. Establish the requested job, selected brand if any, and actual implemented capabilities. This repository currently contains specifications and instruction prompts; do not claim its planned runtime, CLI, MCP, worker, or connectors exist.
+2. Establish Use/Edit scope under the mode contract, the requested job, selected brand if any, and actual implemented capabilities. Instructions, templates and the read-only local dashboard are implemented; do not claim the planned execution runtime, CLI, MCP, worker, or connectors exist.
 3. Read the chosen brand's available operating brief/context, then only the evidence needed for the task. Do not bulk-load other brands, private archives, or prior marketing from other repositories.
 4. Recover current goal, decisions, work, blockers, and authority from actual artifacts/state. Conversation memory can orient investigation, but cannot prove current facts, outcomes, or permissions.
 5. Continue already authorized useful work. Ask only for missing information that materially changes the next decision or for an actually required authorization.
@@ -59,6 +67,8 @@ Use the [brand workspace contract](docs/brand-workspaces.md#10-workspace-steward
 - Before closing a substantive task, save its useful output/decision, update the index and relevant lesson/status links, and leave a concrete resume action. Report only meaningful changes; bookkeeping should not become another burden for the owner.
 
 Before the runtime exists, maintain clearly labeled manual records with ordinary files. Once implemented, use its validated operations and generated views; Markdown notes do not replace transactional state or create execution authority.
+
+The [local dashboard](docs/dashboard.md) reads the selected brand's operating brief and existing observation files. Keep `index.md` current as part of normal marketing work. Optional private `dashboard.json` stores result selectors/context, not duplicated measurements or grants; update it only from real saved evidence. Optional `summarySource` links to a compact private decision/learning projection. Keep it aligned with the operating brief and authoritative records; preserve evidence types and unknowns. Configure goal metrics and dated series without inventing trends, adding daily unique users, or conflating provider populations. Missing values remain unknown. Refreshing the dashboard rereads files, not providers; viewing a status never verifies live delivery, approves work or switches modes.
 
 ## Truth and creative quality
 

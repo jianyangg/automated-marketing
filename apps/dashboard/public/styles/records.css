@@ -1,0 +1,107 @@
+dialog {
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  width: min(1000px, calc(100% - 32px));
+  max-height: 90dvh;
+  padding: 26px;
+  box-shadow: 0 24px 100px #14203630;
+}
+dialog::backdrop {
+  background: #17203377;
+}
+.dialog-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.dialog-header h2 {
+  overflow-wrap: anywhere;
+}
+.record-meta {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.record-content {
+  max-height: 67dvh;
+  overflow: auto;
+  padding: 0 8px 8px 0;
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.record-content p {
+  white-space: pre-line;
+  margin: 12px 0;
+}
+.record-content h2,
+.record-content h3,
+.record-content h4 {
+  margin: 24px 0 10px;
+  line-height: 1.5;
+}
+.record-content li {
+  margin: 7px 0;
+}
+.record-content blockquote {
+  border-left: 3px solid #c4d3f7;
+  padding-left: 16px;
+  color: var(--muted);
+  margin-left: 0;
+}
+.record-content pre {
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 16px;
+  background: #f4f6f9;
+  border-radius: 7px;
+}
+.record-content code {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.9em;
+  background: #f0f3f8;
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+.record-content pre code {
+  padding: 0;
+  background: transparent;
+}
+.table-scroll {
+  max-width: 100%;
+  overflow: auto;
+  margin: 18px 0;
+}
+.record-content table,
+.chart-data table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+.record-content td,
+.record-content th,
+.chart-data td,
+.chart-data th {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.6;
+}
+.record-content th,
+.chart-data th {
+  background: #f4f6fa;
+  font-weight: 600;
+}
+.record-content hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 24px 0;
+}

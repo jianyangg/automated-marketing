@@ -4,7 +4,7 @@
 
 Codex researches your market, recommends what to do next, and prepares website copy, articles, emails, social posts, or a marketing plan. No marketing experience needed.
 
-**Early stage:** instructions and templates are usable today. Automatic publishing, scheduling, and results collection are not built yet.
+**Early stage:** instructions, templates, and a local read-only dashboard work today. Automatic publishing, scheduling, and results collection are not built yet.
 
 ## Get started
 
@@ -17,6 +17,16 @@ Codex researches your market, recommends what to do next, and prepares website c
 Codex organizes each business under `brands/`, keeping its work, decisions, results, and lessons linked.
 
 Keep business-specific files inside `brands/`; Git excludes them from the public repository.
+
+## Dashboard
+
+With Node.js 22+, run `npm run dashboard` and open the printed local URL. No install or build step. See goal metrics, progress charts, the next move, and what past evidence changes; continue in Codex to act. [Dashboard guide](docs/dashboard.md).
+
+## Two modes
+
+**Use mode** is the default: ask for marketing help. Shared framework files stay unchanged.
+
+**Edit mode** changes the machine: say “Edit mode: improve the research workflow.” It applies to that task, then returns to Use mode. These are agent instructions, not file locks. [Mode guide](docs/workspace-modes.md).
 
 ## How it works
 

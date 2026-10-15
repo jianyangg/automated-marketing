@@ -1,0 +1,12 @@
+{
+  "name": "automated-marketing",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dashboard": "node apps/dashboard/server.mjs",
+    "test": "node --test apps/dashboard/test/*.test.mjs"
+  }
+}

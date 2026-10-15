@@ -10,6 +10,10 @@
 !/templates/
 !/examples/
 !/brands/
+!/package.json
+!/apps/
+/apps/*
+!/apps/dashboard/
 
 # Owner workspaces are private; distributable fixtures live in examples/.
 /brands/*
