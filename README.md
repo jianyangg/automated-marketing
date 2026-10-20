@@ -4,7 +4,7 @@
 
 Codex researches your market, recommends what to do next, and prepares website copy, articles, emails, social posts, or a marketing plan. No marketing experience needed.
 
-**Early stage:** instructions, templates, and a local read-only dashboard work today. Automatic publishing, scheduling, and results collection are not built yet.
+**Early stage:** instructions, templates, and a local read-only dashboard work today. This repository has no built-in publisher or scheduler; Codex can use its own scheduled tasks and tools you connect.
 
 ## Get started
 
@@ -17,6 +17,14 @@ Codex researches your market, recommends what to do next, and prepares website c
 Codex organizes each business under `brands/`, keeping its work, decisions, results, and lessons linked.
 
 Keep business-specific files inside `brands/`; Git excludes them from the public repository.
+
+## Keep it moving
+
+You shouldn't need to prompt every work session. Tell Codex:
+
+> Work on my marketing every weekday at 9 AM in my time zone. Research the market, check results, carry out the most useful action within my permissions, and improve the plan. Tell me when something useful happens or you need my help.
+
+Codex should reuse an existing schedule, agree what it may do publicly and when to interrupt you, and track what shipped, what happened, and what changes next. Improvements draw on research, real founders' experience and your results. Local tasks need your computer on and Codex running. [Operating loop](docs/cmo-operating-model.md#7-cadence-and-attention).
 
 ## Dashboard
 
@@ -40,7 +48,7 @@ Prefer the terminal? Run `npm run dashboard` with Node.js 22+. [Dashboard guide]
 
 Research → choose a priority → create the work → review → use it → learn from available results.
 
-Codex handles the method and filing; you supply business facts, goals, constraints, and feedback. Publishing and spending require your permission. You need access to Codex; no additional AI service is required.
+Codex handles the method and filing; you supply business facts, goals, constraints, and feedback. Publishing and spending require your permission, which can cover a clearly defined ongoing activity. You need access to Codex; no additional AI service is required.
 
 ## Explore
 

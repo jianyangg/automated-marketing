@@ -14,6 +14,8 @@ Recover the right context and choose useful work without depending on previous c
 6. Check current source/release freshness and any unresolved conflicting facts relevant to the task. Do not substitute old memory or historical campaign acceptance for current evidence.
 7. Read the relevant workflow prompt and continue useful authorized work. Ask only essential missing questions, bundled when practical.
 
+Recover the selected brand's current private attention policy and standing permissions before interrupting the owner. Continue covered work proactively; record routine decisions, results and blocked dependencies locally when quiet operation is requested. Do not turn an old approval stop into a new question after the owner has granted the covered action. Never infer broader authority from a notification preference. Before adopting a material improvement, find the relevant research, firsthand founder/operator account or actual outcome evidence; preserve the distinction between findings, experience and a hypothesis.
+
 Before strategy or production, follow relevant decision/lesson links and inspect comparable prior work. Retrieve only what helps the present decision; record what should be reused, changed, avoided, or retested. Choose filing locations and maintain navigation as part of the task; the owner need not manage the workspace or prescribe the marketing method.
 
 For evidence-dependent decisions, route to `prompts/research.md`; search proactively using available tools. Check the access, date, applicability, and revision of any method/evidence being reused. This framework does not run surveys, interviews, recruitment, or synthetic customer panels. LLM concept critique follows `prompts/concept-evaluation.md` and cannot establish demand.

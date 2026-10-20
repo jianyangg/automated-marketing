@@ -86,6 +86,21 @@ A preparation policy can maintain a rolling two-week horizon with a bounded read
 
 Default reports show the current goal, highest-priority next action, meaningful change, blockers, and decisions required. Detailed source tables and metrics remain accessible on request. Silence on unchanged state is part of the attention budget.
 
+When the owner requests scheduled initiative, use an available host scheduling tool, preferably returning to the existing chat. Inspect existing tasks, choose a useful cadence and explicit timezone, preserve unrelated settings, and verify the saved task rather than claim a Markdown instruction installed one. Reuse one suitable task; coordinate other agents' queues before external execution. Local work requires the computer and desktop app available. This repository implements no scheduler or publishing worker.
+
+A substantive run follows this complete cycle, retrieving prior evidence rather than rebuilding the whole strategy daily:
+
+1. Recover the goal, previous action, pending outcomes, authority and unresolved delivery. Reconcile uncertain attempts before any retry.
+2. Obtain decision-relevant data: current category/customer/alternative evidence and available consented aggregate channel/product results. Use the [research method](research/secondary-research.md) for material unknowns, including primary sources, contrary evidence and applicability limits. Reuse still-relevant studies; do not manufacture a new literature review every day.
+3. Name the current constraint and one testable hypothesis. Choose a useful action, the observation that would change the decision, its review window and stop condition. These are operating choices, not research-proven optimal timers or forecasts.
+4. Produce and execute complete work within actual owner authority and platform rules. Standing permission can cover a defined class of activity; do not ask again for covered actions. Permission for replies does not authorize unrelated posts, DMs, spending, account changes or product releases.
+5. Verify what actually happened and retain the real destination/version/time. When outcomes mature, distinguish reach, relevant response, destination activity, useful product/service action and repeat use. Preserve unknowns, provider populations and attribution limits. An LLM critique is not customer data; observed conversion is not proof of incrementality.
+6. Choose keep/change/stop/wait, update the private brief and evidence-linked lesson, and leave the next action. A blocked channel is not a reason to abandon independent useful work; no qualified action is not a reason to pad output with pitches.
+
+Owner updates lead with **what shipped → observed response → useful business outcome → next change**. Surface meaningful progress, failures or needed owner decisions; stay quiet on unchanged/non-actionable state. Implementation detail and research tables belong in linked records. Generic instructions never enroll every user in publishing or disclose a private owner's identity.
+
+An owner's explicit private attention policy can further narrow interruptions. Save routine progress, reflections and non-critical blockers in the operating brief/dashboard rather than repeatedly requesting direction. Continue independent authorized work. Escalate the owner's named exceptions and genuinely required safety/authorization decisions; do not treat quiet operation as a permission grant or conceal uncertain delivery. Public instructions contain the method, never an individual owner's identity, email, accounts or private exception list.
+
 ## 8. Learning and self-review
 
 Separate three feedback loops:

@@ -12,6 +12,8 @@ The agent should actively use its available web search/open tools when a marketi
 
 A good general paper does not prove this business has a particular problem. A competitor website describes its own positioning, not whether that positioning caused success. Keep these questions linked but separate.
 
+**Firsthand founder/operator experience** can also inform a practical adaptation. Prefer the founder's own dated account, original interview or attributable case record with a concrete action, context and observed result. Verify who is speaking and what was actually done; seek failures, costs, incentives and contrary cases. Do not turn secondhand growth stories, unattributed screenshots or AI-generated advice into founder evidence. Record these sources as practitioner experience, separate from scholarly findings and this brand's outcomes; survivorship, self-reporting and different channels limit transfer. An interesting founder tactic justifies a bounded hypothesis when relevant, not a guaranteed growth claim.
+
 ## 2. Research-run contract
 
 Save a brief before substantial searching: decision, question, business/context, geography/language/timeframe, inclusion/exclusion criteria, query families, effort cap, expected output, and what evidence could change the decision. Unknown scope remains explicit.

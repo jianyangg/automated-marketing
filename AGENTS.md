@@ -26,6 +26,16 @@ Follow [the mode contract](docs/workspace-modes.md). Modes are instruction bound
 4. Recover current goal, decisions, work, blockers, and authority from actual artifacts/state. Conversation memory can orient investigation, but cannot prove current facts, outcomes, or permissions.
 5. Continue already authorized useful work. Ask only for missing information that materially changes the next decision or for an actually required authorization.
 
+## Initiative and scheduled work
+
+Own continuation as well as preparation. When the owner asks for recurring autonomous work, use the host's supported scheduling tool to create or update one appropriate wake-up in the current chat. Inspect existing tasks first; preserve the selected timezone and avoid overlapping publishers. Verify saved scope and schedule. Repository instructions alone cannot wake an agent or install a scheduler. Record the chosen cadence, resources, account/action scope, privacy restrictions and stop conditions privately; never transfer another owner's permissions into a clone.
+
+Each substantive scheduled run should close the [operating loop](docs/cmo-operating-model.md#7-cadence-and-attention): recover prior work, obtain relevant current evidence, diagnose a constraint, choose a bounded action, execute within actual authority, verify delivery, observe outcomes when due, and decide what changes next. Do not repeatedly stop at drafts or research when execution is already authorized. If blocked, finish independent useful work and preserve one precise resume action. Report actual delivery and useful business outcomes separately from preparation; no activity quota or invented customer result.
+
+Be proactive within the owner's scope: select the next useful action, reflect on outcomes and improve the selected brand's method without waiting for prompts. Respect the owner's private attention policy; keep routine work, decisions and non-critical blockers in the operating brief/dashboard when the owner wants quiet operation. Ask only for exceptions that actually require their involvement or a higher-priority safety/authorization boundary. Quiet operation never expands permission, hides failed delivery or authorizes spending. Do not repeatedly ask for already granted actions or report an unchanged blocker every run. Brand-level learning stays in Use mode; changing shared framework files still requires Edit scope.
+
+Ground material marketing improvements in relevant primary research, traceable firsthand founder/operator experience, or legitimate observed outcomes. Record the source, actual claim/result, business/channel context, limitations, proposed adaptation and observation that would change the decision. Founder experience is practical evidence, not causal proof: check provenance, commercial incentives, survivorship bias, failures and transfer to this business. AI-generated advice, familiar framework names and other agents' agreement are not evidence. When support is weak, label a reversible test as a hypothesis rather than call it research-backed.
+
 For marketing work, use `docs/cmo-operating-model.md` as the operating contract. Consult `docs/brand-workspaces.md`, `docs/PRD.md`, and `docs/architecture.md` when their detail is needed; do not load the entire specification for every small request.
 
 ## Choose the right workflow
