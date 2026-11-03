@@ -14,6 +14,7 @@ import { importReceipts } from "./imports.mjs";
 import { loadConfig } from "./config.mjs";
 import { readSecret, writeSecret } from "./secrets.mjs";
 import { connectThreads } from "./connect.mjs";
+import { loadPlaybook } from "./playbook.mjs";
 import { channelAdapters, metricReaders, manualAdapter } from "./adapters/index.mjs";
 
 const USAGE = `Usage: npm run engine -- <command> --brand <id> [options]
@@ -31,6 +32,7 @@ Daily loop
 
 Records
   show <action>
+  playbook [--tactic <id>]                 Sourced tactics from comparable companies
   observe --metric --value <number|unavailable> --unit --from --to --source [--action] [--note] [--correct]
   import --file <path> --timezone <zone>   Add posts published outside the engine
   refresh-token --channel threads          Renew the Threads token (weekly; no-op if recent)
@@ -79,6 +81,7 @@ const options = {
   days: { type: "string", default: "7" },
   file: string,
   "app-id": string,
+  tactic: string,
   "replace-manual-brief": { type: "boolean", default: false },
   help: { type: "boolean", default: false },
 };
@@ -110,6 +113,13 @@ async function run(command, positionals, values, brandDir, db) {
   switch (command) {
     case "status":
       return status(db, { config });
+    case "playbook": {
+      const cards = await loadPlaybook();
+      if (!values.tactic) return cards.map(({ id, tactic, fits, execution }) => ({ id, tactic, fits, execution }));
+      const card = cards.find((item) => item.id === values.tactic);
+      if (!card) throw new EngineError("not_found", `No tactic ${values.tactic}.`);
+      return card;
+    }
     case "show":
       return getAction(db, argument(positionals, 1, "action"));
     case "propose": {

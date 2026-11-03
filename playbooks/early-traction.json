@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "scope": "Early traction for small consumer and prosumer software (solo or tiny team, little audience, little budget). Public sources only; a brand's own results stay in its private engine state, tagged with these ids.",
+  "updated": "2026-11-03",
+  "tactics": [
+    {
+      "id": "community-first",
+      "tactic": "Participate helpfully in communities where the audience already asks for help for weeks before sharing; follow each venue's self-promotion rule and ask moderators first.",
+      "fits": "Pre-launch or pre-PMF, zero audience, zero budget.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "Akiflow", "what": "~4 weeks of Reddit productivity participation and founder DMs before launch: '90% of the work is done in the four weeks before'", "source": "https://getlatka.com/companies/akiflow/interviews/akiflow-nunzio-martinello-2021", "sourceType": "founder" },
+        { "company": "Focusmate", "what": "First users from contribute-first posts in remote-work Facebook groups and Reddit after asking admins", "source": "https://sidehustleschool.com/751", "sourceType": "founder" }
+      ],
+      "counterEvidence": ["Large problem communities (e.g. r/productivity, r/ADHD) ban promotion entirely; posting links there burns the account."],
+      "transferLimits": "Must be done as a real person, not automated. Traffic from no-link comments is near zero; the value is audience language and trust."
+    },
+    {
+      "id": "watch-early-users",
+      "tactic": "Personally watch or interview every early user, fix onboarding, and run the 'very disappointed' survey once ~40+ users are active.",
+      "fits": "Any pre-PMF product with a handful of users.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "Superhuman", "what": "Surveyed 100–200 users; 'very disappointed' rose 22% → 58% by segmenting and fixing", "source": "https://review.firstround.com/how-superhuman-built-an-engine-to-find-product-market-fit/", "sourceType": "founder" },
+        { "company": "Sunsama", "what": "Onboarding calls and session replays for a summer to fix activation", "source": "https://userlist.com/podcast/driving-behavior-change-with-ashutosh-priyadarshy/", "sourceType": "founder" }
+      ],
+      "counterEvidence": [],
+      "transferLimits": "Retention work, not acquisition; needs analytics access and some users."
+    },
+    {
+      "id": "press-newsletters",
+      "tactic": "Pitch editors and newsletters that cover the category; localization or a seasonal angle can be the hook.",
+      "fits": "Products with a clear, demonstrable angle.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "Structured", "what": "German localization led to German tech-blog coverage and a first App Store feature (>20k downloads that month)", "source": "https://structured.app/blog/2-years", "sourceType": "founder" },
+        { "company": "Todoist", "what": "Self-submitted to Lifehacker and Digg after a blog launch; ReadWriteWeb coverage followed", "source": "https://mixergy.com/interviews/doist-with-amir-salihefendic/", "sourceType": "founder" }
+      ],
+      "counterEvidence": [],
+      "transferLimits": "2007-era blogs reached the whole market; today's equivalents are smaller niche newsletters."
+    },
+    {
+      "id": "build-in-public",
+      "tactic": "Share the build, numbers and demos from the founder's own account.",
+      "fits": "Founders willing to be visible; slow from zero followers.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "Structured", "what": "Own Twitter plus friends: >1,000 downloads in month one", "source": "https://structured.app/blog/2-years", "sourceType": "founder" },
+        { "company": "Llama Life", "what": "Building in public on Twitter led to an investor acquisition and ~950 paying users", "source": "https://getlatka.com/companies/llama-life/interviews/llama-life-marie-ng-2022", "sourceType": "founder" }
+      ],
+      "counterEvidence": ["Brand accounts with no followers get near-zero reach; reach for indie builders on X is lower than in 2020–21."],
+      "transferLimits": "Requires a real person's identity; brands that keep the founder anonymous cannot use it."
+    },
+    {
+      "id": "seasonal-intent",
+      "tactic": "Time launches and content to moments of category intent (New Year planning, back to school) and join indie promotions.",
+      "fits": "Planning, habit and productivity products.",
+      "execution": "site-branch",
+      "cases": [
+        { "company": "Structured", "what": ">35k downloads in January 2021 from New Year's resolutions and Indie App Santa", "source": "https://structured.app/blog/2-years", "sourceType": "founder" }
+      ],
+      "counterEvidence": [],
+      "transferLimits": "Pages need weeks to be indexed before the season starts."
+    },
+    {
+      "id": "free-tool",
+      "tactic": "Ship a free, no-signup, single-purpose tool that people search for and that launch communities accept, and route its users into the product.",
+      "fits": "Products whose core action can be demonstrated in one step.",
+      "execution": "site-branch",
+      "cases": [
+        { "company": "goblin.tools", "what": "Free no-login AI task breakdown ('Magic ToDo'); searched by name ('break down tasks goblin'). Traffic estimate ~900K visits/month is unverified", "source": "https://goblin.tools", "sourceType": "observed" }
+      ],
+      "counterEvidence": ["A tool that gives generic output for the user's input loses visitors; it must answer the actual input."],
+      "transferLimits": "Value to the business depends on routing tool users into the product."
+    },
+    {
+      "id": "no-signup-search-pages",
+      "tactic": "Dedicated pages for long-tail queries where small sites already rank (e.g. 'to do list no sign up', method names like '1-3-5 rule').",
+      "fits": "Any product with a frictionless trial.",
+      "execution": "site-branch",
+      "cases": [
+        { "company": "Small tool sites", "what": "Google results for 'to do list no sign up' include small sites (freetoolonline, projoodle, mediashower)", "source": "https://suggestqueries.google.com", "sourceType": "observed" }
+      ],
+      "counterEvidence": ["New domains with no inbound links rank slowly; pages alone did not produce clicks for one brand (21 impressions, 0 clicks)."],
+      "transferLimits": "Needs inbound links (directories, launches) to start ranking."
+    },
+    {
+      "id": "directory-listings",
+      "tactic": "List on free directories that rank for 'X alternative' searches (AlternativeTo, SaaSHub, Microlaunch, Uneed free queue).",
+      "fits": "Any product; slow queues, so start early.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "AlternativeTo", "what": "Listings rank for long-tail 'alternative to' queries; new apps wait months in the free queue", "source": "https://alternativeto.net/faq/", "sourceType": "observed" }
+      ],
+      "counterEvidence": ["Several directories (BetaList, Futurepedia) are now paid only."],
+      "transferLimits": "Small direct traffic; main value is inbound links and alternative-search presence."
+    },
+    {
+      "id": "launch-amplifier",
+      "tactic": "Product Hunt / Show HN once there is a list or user base to amplify; lead with a behaviour or angle, not the category.",
+      "fits": "After community, list or early users exist.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "Akiflow", "what": "Product Hunt with a 6k email list: ~1,000 signups, ~400 active", "source": "https://getlatka.com/companies/akiflow/interviews/akiflow-nunzio-martinello-2021", "sourceType": "founder" },
+        { "company": "NowDo", "what": "Show HN 'todo app for procrastinators' reached 103 points while generic todo apps got 1–3", "source": "https://hn.algolia.com/?query=Show%20HN%20todo", "sourceType": "observed" }
+      ],
+      "counterEvidence": ["Product Hunt without an audience: reports of 400 signups and 1 payer, or top-50 with ~zero signups (https://www.indiehackers.com/post/why-product-hunt-launch-won-t-save-your-startup-0b511875f8)."],
+      "transferLimits": "One shot per product every ~6 months on Product Hunt."
+    },
+    {
+      "id": "app-store-search",
+      "tactic": "Target App Store keywords, collect reviews and localize once a native app is live.",
+      "fits": "Products with a released iOS/Android app.",
+      "execution": "handoff",
+      "cases": [
+        { "company": "Structured", "what": "App Store featuring after localization; later App of the Day", "source": "https://structured.app/blog/2-years", "sourceType": "founder" }
+      ],
+      "counterEvidence": [],
+      "transferLimits": "Only once the app is released."
+    }
+  ]
+}

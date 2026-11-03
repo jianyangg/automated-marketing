@@ -29,7 +29,7 @@ Record what you concluded with `decide --verdict <keep|change|stop|wait> --ratio
 
 Every 14 days of posting on a channel, run a channel review. Look at the north-star trend (`last7` against `prior7`, with known days), median views per post, and any clicks.
 
-- If the north star has not risen and median views stay under 50, posting on this channel is not the constraint you can move. Record `decide --verdict change`, then use [strategy](strategy.md) to choose a different lever: the landing page and first-run experience, search pages, a community where the audience already asks for help, lifecycle email, or a referral loop. Prepare that work instead of more posts on the same channel.
+- If the north star has not risen and median views stay under 50, posting on this channel is not the constraint you can move. Record `decide --verdict change`, then run the [distribution procedure](distribution.md) to choose a different lever: the landing page and first-run experience, search pages, a community where the audience already asks for help, lifecycle email, or a referral loop. Prepare that work instead of more posts on the same channel.
 - If views are healthy but the north star is flat, the problem is the message-to-product path. Audit the destination before changing creative.
 - If the north star rose, `keep` what changed and keep testing one variable at a time.
 
