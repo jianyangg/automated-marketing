@@ -2,6 +2,7 @@
 // the send and holds the account, a person posts the exact content, and
 // `receipt` records the live URL. It never claims a post went out by itself.
 export const manualAdapter = {
+  byPerson: true,
   async publish() {
     return { state: "handoff" };
   },

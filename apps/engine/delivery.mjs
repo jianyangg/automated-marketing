@@ -42,7 +42,10 @@ function settle(db, id, status, { providerId = null, url = null, error = null },
 
 // Checks every rule and reserves the send as one atomic step, so a crash or
 // an overlapping run can never leave two attempts that both believe they may go.
-function reserve(db, action, now) {
+// `byPerson` marks a manual handoff: the engine only packages the content and
+// holds the account. A person decides whether and when to post, so no grant or
+// approval is needed for the handoff itself; duplicate protection still applies.
+function reserve(db, action, now, { byPerson = false } = {}) {
   return transaction(db, () => {
     const live = db
       .prepare("SELECT * FROM deliveries WHERE action_id = ? AND status != 'failed'")
@@ -65,7 +68,7 @@ function reserve(db, action, now) {
     const grant = activeGrant(db, action.channel, action.account, now);
     const date = localDate(now, grant?.timezone ?? "UTC");
     let grantId = null;
-    if (!action.approved) {
+    if (!action.approved && !byPerson) {
       if (!grant)
         throw new EngineError(
           "not_authorized",
@@ -117,7 +120,7 @@ export async function publish(db, brandDir, actionId, { adapters, now = new Date
   if (existing) return view(existing);
   await assertCurrent(brandDir, action);
 
-  const reservation = reserve(db, action, now);
+  const reservation = reserve(db, action, now, { byPerson: adapter.byPerson === true });
   if (reservation.done) return reservation.done;
 
   let result;

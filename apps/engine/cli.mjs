@@ -13,6 +13,7 @@ import { writeBrief, writeSnapshot } from "./brief.mjs";
 import { importReceipts } from "./imports.mjs";
 import { loadConfig } from "./config.mjs";
 import { readSecret, writeSecret } from "./secrets.mjs";
+import { connectThreads } from "./connect.mjs";
 import { channelAdapters, metricReaders, manualAdapter } from "./adapters/index.mjs";
 
 const USAGE = `Usage: npm run engine -- <command> --brand <id> [options]
@@ -32,9 +33,10 @@ Records
   show <action>
   observe --metric --value <number|unavailable> --unit --from --to --source [--action] [--note] [--correct]
   import --file <path> --timezone <zone>   Add posts published outside the engine
-  refresh-token --channel threads          Renew the long-lived token in the Keychain
+  refresh-token --channel threads          Renew the Threads token (weekly; no-op if recent)
 
 Owner only (interactive terminal)
+  connect threads --app-id <id>            Sign in to Threads and store the token in the Keychain
   grant --channel --account --max-per-day --timezone --pause-after-failures --expires --statement
   revoke <grant>
   approve <action>
@@ -76,6 +78,7 @@ const options = {
   statement: string,
   days: { type: "string", default: "7" },
   file: string,
+  "app-id": string,
   "replace-manual-brief": { type: "boolean", default: false },
   help: { type: "boolean", default: false },
 };
@@ -182,9 +185,21 @@ async function run(command, positionals, values, brandDir, db) {
       const channel = config.channels[values.channel];
       if (values.channel !== "threads" || !channel)
         throw new EngineError("usage", "--channel threads must be configured in engine.json.");
+      // Safe to run every day: tokens last 60 days and can only be refreshed
+      // after 24 hours, so this renews weekly and otherwise does nothing.
+      const current = readSecret(channel.secret);
+      const ageDays = current.obtainedAt ? (Date.now() - Date.parse(current.obtainedAt)) / 86_400_000 : Infinity;
+      if (ageDays < 7) return { refreshed: false, tokenAgeDays: Math.floor(ageDays) };
       const refreshed = await adapters.threads.refreshToken();
-      writeSecret(channel.secret, { ...readSecret(channel.secret), accessToken: refreshed.accessToken });
+      writeSecret(channel.secret, { ...current, accessToken: refreshed.accessToken, obtainedAt: new Date().toISOString() });
       return { refreshed: values.channel, expiresInSeconds: refreshed.expiresInSeconds };
+    }
+    case "connect": {
+      const name = argument(positionals, 1, "channel");
+      const channel = config.channels[name];
+      if (name !== "threads" || !channel)
+        throw new EngineError("usage", "Add the threads channel (account and secret) to engine.json first.");
+      return connectThreads({ brand: values.brand, account: channel.account, appId: values["app-id"] });
     }
     case "grant":
       return addGrant(db, {

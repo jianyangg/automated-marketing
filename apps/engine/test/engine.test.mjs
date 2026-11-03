@@ -225,6 +225,20 @@ test("a manual handoff holds the account until a verified receipt is recorded", 
   assert.equal(receipt.status, "delivered");
 });
 
+test("a person-posted handoff needs no API grant, but an API send still does", async (t) => {
+  const ctx = await fixture(t);
+  const forPerson = await draft(ctx, "for a person", { channel: "reddit" });
+  const handoff = await publish(ctx.db, ctx.brand, forPerson.id, { adapters: { reddit: manualAdapter } });
+  assert.equal(handoff.status, "handoff");
+  await assert.rejects(publish(ctx.db, ctx.brand, forPerson.id, { adapters: { reddit: manualAdapter } }), {
+    code: "reconcile_required",
+  });
+  const viaApi = await draft(ctx, "via api");
+  await assert.rejects(publish(ctx.db, ctx.brand, viaApi.id, { adapters: { threads: fakeAdapter(delivered) } }), {
+    code: "not_authorized",
+  });
+});
+
 test("reconcile closes a handoff once the provider shows the post live", async (t) => {
   const ctx = await fixture(t);
   await addGrant(ctx.db, standingGrant, { confirm: yes });
