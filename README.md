@@ -30,13 +30,13 @@ Codex should reuse an existing schedule, agree what it may do publicly and when 
 
 Each business keeps its state in `brands/<business>/.state/engine.sqlite`. Codex runs `npm run engine -- <command> --brand <business>` (`--help` lists commands). Three steps are yours, because the engine accepts permission only from you at your own terminal:
 
-1. **Connect Threads.** Create a Meta app with `threads_basic`, `threads_content_publish` and `threads_manage_insights`, get a long-lived token, then store it (paste `{"userId": "...", "accessToken": "..."}` at the prompt):
+1. **Connect Threads.** Create a Meta app with the Threads use case (permissions `threads_basic`, `threads_content_publish`, `threads_manage_insights`), add `https://localhost:8443/callback` as a redirect URI and your account as a tester. Then sign in once; the token goes straight into the Keychain:
 
    ```sh
-   security add-generic-password -U -s automated-marketing -a <business>/threads -w
+   npm run engine -- connect threads --brand <business> --app-id <threads-app-id>
    ```
 
-2. **Connect analytics (optional, recommended).** For Mixpanel, store a service account as `{"username": "...", "secret": "..."}` under `<business>/mixpanel` the same way, and tell Codex the project's time zone.
+2. **Connect analytics (optional, recommended).** For Mixpanel, store a service account as `{"username": "...", "secret": "..."}` with `security add-generic-password -U -s automated-marketing -a <business>/mixpanel -w`, and tell Codex the project's time zone.
 3. **Grant permission.** For example, one post a day for 30 days, paused after two failures:
 
    ```sh
