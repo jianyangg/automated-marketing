@@ -20,7 +20,7 @@ test("flags the common machine-writing tells", () => {
 
 test("plain, specific copy passes, and findings carry line numbers", () => {
   const plain =
-    "We built AikenDewit because our lists kept growing faster than our days.\nYou pick up to three things for today and start one of them.";
+    "We built Sample List because our lists kept growing faster than our days.\nYou pick up to three things for today and start one of them.";
   assert.deepEqual(lintCopy(plain), { ok: true, findings: [] });
   const [finding] = lintCopy("Fine line.\nA robust planner.").findings;
   assert.equal(finding.line, 2);
