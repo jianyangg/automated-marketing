@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { join, basename } from "node:path";
 import { EngineError, localDate } from "./store.mjs";
 
 // `brands/<id>/engine.json` says which channels and metrics this brand uses.
@@ -47,17 +47,24 @@ function metric(entry, index) {
   };
 }
 
-export function parseConfig(raw) {
+// With `brand` set, every credential key must belong to that brand
+// ("<brand>/..."), so one brand's config can never borrow another's account.
+export function parseConfig(raw, { brand } = {}) {
   const config = raw ?? {};
+  const owned = (key, where) => {
+    if (brand && !key.startsWith(`${brand}/`)) fail(`${where} must start with "${brand}/".`);
+    return key;
+  };
   const channels = {};
   for (const [channel, entry] of Object.entries(config.channels ?? {})) {
     if (channel !== "threads") fail(`channel "${channel}" has no adapter yet.`);
     channels[channel] = {
       account: text(entry?.account, `channels.${channel}.account`),
-      secret: text(entry?.secret, `channels.${channel}.secret`),
+      secret: owned(text(entry?.secret, `channels.${channel}.secret`), `channels.${channel}.secret`),
     };
   }
   const metrics = (config.metrics ?? []).map(metric);
+  metrics.forEach((entry, index) => owned(entry.secret, `metrics[${index}].secret`));
   const names = new Set(metrics.map((m) => m.name));
   if (names.size !== metrics.length) fail("metric names must be unique.");
   if (config.northStar !== undefined && !names.has(config.northStar))
@@ -75,7 +82,7 @@ export async function loadConfig(brandDir) {
     throw error;
   }
   try {
-    return parseConfig(JSON.parse(raw));
+    return parseConfig(JSON.parse(raw), { brand: basename(brandDir) });
   } catch (error) {
     if (error instanceof EngineError) throw error;
     fail("not valid JSON.");

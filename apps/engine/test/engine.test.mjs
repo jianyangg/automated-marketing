@@ -170,6 +170,33 @@ test("expired or revoked grants stop publishing", async (t) => {
   assert.equal(adapter.calls.length, 0);
 });
 
+test("text that could disguise itself at the owner's approval prompt is rejected", async (t) => {
+  const ctx = await fixture(t);
+  for (const sneaky of ["Hello\u001b[2K\rOther text", "Pay ‮redro‬ now", "a\u0000b"])
+    await assert.rejects(draft(ctx, sneaky), { code: "invalid_action" });
+  await assert.rejects(draft(ctx, "ok", { variable: "hook=‮question" }), { code: "invalid_action" });
+  await assert.rejects(
+    addGrant(ctx.db, { ...standingGrant, statement: "One post\u001b[1A\u001b[2KUnlimited posts" }, { confirm: yes }),
+    { code: "invalid_grant" },
+  );
+  assert.equal((await draft(ctx, "Line one\n\tLine two 🙂")).text, "Line one\n\tLine two 🙂");
+});
+
+test("an unknown API send cannot be closed by hand to free a resend", async (t) => {
+  const ctx = await fixture(t);
+  await addGrant(ctx.db, standingGrant, { confirm: yes });
+  const action = await draft(ctx);
+  const adapter = fakeAdapter(() => {
+    throw new Error("timeout");
+  });
+  await publish(ctx.db, ctx.brand, action.id, { adapters: { threads: adapter } });
+  assert.throws(() => recordReceipt(ctx.db, action.id, { absent: true }), { code: "reconcile_required" });
+  await assert.rejects(publish(ctx.db, ctx.brand, action.id, { adapters: { threads: adapter } }), {
+    code: "reconcile_required",
+  });
+  assert.equal(adapter.calls.length, 1);
+});
+
 test("assets must stay inside the brand folder", async (t) => {
   const ctx = await fixture(t);
   await assert.rejects(draft(ctx, "x", { assets: ["../../../etc/hosts"] }), {

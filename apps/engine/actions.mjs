@@ -1,14 +1,14 @@
 import { createHash, randomBytes } from "node:crypto";
 import { readFile, realpath } from "node:fs/promises";
 import { join, relative, isAbsolute } from "node:path";
-import { EngineError } from "./store.mjs";
+import { EngineError, assertPrintable } from "./store.mjs";
 
 export const sha256 = (data) => createHash("sha256").update(data).digest("hex");
 
 function required(value, name) {
   if (typeof value !== "string" || !value.trim())
     throw new EngineError("invalid_action", `${name} is required.`);
-  return value.trim();
+  return assertPrintable(value.trim(), name, "invalid_action");
 }
 
 // Paths are resolved through symlinks and must stay inside the brand folder,
@@ -35,6 +35,8 @@ export async function hashAssets(brandDir, entries) {
   return Promise.all(
     entries.map(async (entry) => {
       const { path, publicUrl } = typeof entry === "string" ? { path: entry } : entry;
+      assertPrintable(path, "Asset path", "invalid_asset");
+      assertPrintable(publicUrl, "Public URL", "invalid_asset");
       if (publicUrl !== undefined && !/^https:\/\/\S+$/.test(publicUrl))
         throw new EngineError("invalid_asset", `Public URL must be https: ${publicUrl}`);
       const file = await brandFile(brandDir, path);
@@ -64,7 +66,8 @@ export async function prepareAction(brandDir, spec, { now = new Date() } = {}) {
   const hypothesis = required(spec.hypothesis, "hypothesis");
   const text = required(spec.text, "text");
   // "name=value", e.g. "hook=question". One variable per post keeps the comparison readable.
-  const variable = spec.variable === undefined ? null : spec.variable.trim();
+  const variable =
+    spec.variable === undefined ? null : assertPrintable(spec.variable.trim(), "variable", "invalid_action");
   if (variable !== null && !/^[a-z0-9_-]+=[^=\s][^=]*$/i.test(variable))
     throw new EngineError("invalid_action", 'variable must look like "hook=question".');
   const assets = await hashAssets(brandDir, spec.assets ?? []);

@@ -27,6 +27,10 @@ class HttpError extends Error {
 
 export function threadsAdapter({
   credentials,
+  // The handle this brand configured. Publishing checks it against both the
+  // action and the token's own profile, so a grant for one account can never
+  // post through a token that belongs to another.
+  account,
   fetch = globalThis.fetch,
   sleep = (ms) => new Promise((done) => setTimeout(done, ms)),
   baseUrl = THREADS_API,
@@ -70,6 +74,19 @@ export function threadsAdapter({
       throw new DefiniteFailure(`The image at ${asset.publicUrl} differs from approved ${asset.path}.`);
   }
 
+  // Asks Meta whose token this is. A token for a different profile, or a
+  // stored userId that does not match it, stops the send before anything is created.
+  let verified = false;
+  async function verifyIdentity(userId) {
+    if (verified) return;
+    const me = await call("me", { params: { fields: "id,username" } });
+    if (me.id !== userId || me.username?.toLowerCase() !== account?.toLowerCase())
+      throw new DefiniteFailure(
+        `The stored Threads token belongs to @${me.username ?? "unknown"}, not the configured @${account}.`,
+      );
+    verified = true;
+  }
+
   async function waitUntilReady(containerId) {
     for (let poll = 0; poll < maxPolls; poll++) {
       const { status, error_message: reason } = await call(containerId, {
@@ -88,7 +105,9 @@ export function threadsAdapter({
   }
 
   return {
-    async publish({ text, assets }) {
+    async publish({ account: target, text, assets }) {
+      if (target !== account)
+        throw new DefiniteFailure(`This Threads connection is configured for @${account}, not @${target}.`);
       if ([...text].length > MAX_TEXT)
         throw new DefiniteFailure(`Threads posts are limited to ${MAX_TEXT} characters.`);
       if (assets.length > 1)
@@ -103,6 +122,7 @@ export function threadsAdapter({
       let userId;
       try {
         ({ userId } = auth());
+        await verifyIdentity(userId);
         if (image) await verifyPublicCopy(image);
         ({ id: containerId } = await call(`${userId}/threads`, {
           method: "POST",

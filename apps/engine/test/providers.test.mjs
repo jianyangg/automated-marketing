@@ -11,6 +11,8 @@ const json = (body, status = 200, headers = {}) =>
 // A scripted provider: each route returns a queued response (or throws) and
 // every request is logged so tests can assert exactly what was sent.
 function fakeFetch(routes) {
+  // The token's own profile, checked before every send.
+  routes = { "GET /v1.0/me": json({ id: "42", username: "a" }), ...routes };
   const log = [];
   const fetch = async (url, init = {}) => {
     const method = init.method ?? "GET";
@@ -28,8 +30,8 @@ function fakeFetch(routes) {
 
 const credentials = () => ({ userId: "42", accessToken: "secret-token" });
 const adapter = (fetch, extra = {}) =>
-  threadsAdapter({ credentials, fetch, sleep: async () => {}, pollEveryMs: 0, maxPolls: 3, ...extra });
-const request = (extra = {}) => ({ text: "Pick one task.", assets: [], ...extra });
+  threadsAdapter({ account: "a", credentials, fetch, sleep: async () => {}, pollEveryMs: 0, maxPolls: 3, ...extra });
+const request = (extra = {}) => ({ account: "a", text: "Pick one task.", assets: [], ...extra });
 
 test("text post: container, wait for processing, publish, then read the permalink", async () => {
   const { fetch, log } = fakeFetch({
@@ -40,8 +42,9 @@ test("text post: container, wait for processing, publish, then read the permalin
   });
   const result = await adapter(fetch).publish(request());
   assert.deepEqual(result, { state: "delivered", providerId: "m1", url: "https://www.threads.com/@a/post/x" });
-  assert.match(log[0].body, /media_type=TEXT/);
-  assert.match(log[0].body, /text=Pick\+one\+task\./);
+  assert.equal(log[0].path, "/v1.0/me");
+  assert.match(log[1].body, /media_type=TEXT/);
+  assert.match(log[1].body, /text=Pick\+one\+task\./);
   assert.match(log.at(-2).body, /creation_id=c1/);
 });
 
@@ -68,6 +71,19 @@ test("nothing is public before threads_publish, so earlier failures are definite
   const already = fakeFetch({ "POST /v1.0/42/threads": json({ id: "c1" }), "GET /v1.0/c1": json({ status: "PUBLISHED" }) });
   const live = await adapter(already.fetch).publish(request()).catch((e) => e);
   assert.ok(!(live instanceof DefiniteFailure));
+});
+
+test("posts only to the configured account, through a token that belongs to it", async () => {
+  const wrongAction = fakeFetch({});
+  await assert.rejects(adapter(wrongAction.fetch).publish(request({ account: "someone-else" })), /configured for @a/);
+  assert.equal(wrongAction.log.length, 0);
+  const otherToken = fakeFetch({ "GET /v1.0/me": json({ id: "42", username: "other" }) });
+  const error = await adapter(otherToken.fetch).publish(request()).catch((e) => e);
+  assert.ok(error instanceof DefiniteFailure);
+  assert.match(error.message, /belongs to @other/);
+  assert.ok(otherToken.log.every((entry) => entry.method === "GET"), "nothing was created");
+  const otherId = fakeFetch({ "GET /v1.0/me": json({ id: "99", username: "a" }) });
+  await assert.rejects(adapter(otherId.fetch).publish(request()), DefiniteFailure);
 });
 
 test("a dropped publish call is not a definite failure; a 4xx refusal is", async () => {
@@ -164,7 +180,7 @@ test("errors never echo the access token", async () => {
   const { fetch, log } = fakeFetch({ "POST /v1.0/42/threads": json({}, 401) });
   const error = await adapter(fetch).publish(request()).catch((e) => e);
   assert.doesNotMatch(error.message, /secret-token/);
-  assert.match(log[0].body, /access_token=secret-token/);
+  assert.match(log.find((entry) => entry.method === "POST").body, /access_token=secret-token/);
 });
 
 test("Mixpanel reads daily counts with Basic auth and leaves missing days absent", async () => {

@@ -12,6 +12,18 @@ export class EngineError extends Error {
   }
 }
 
+// Terminal control codes and bidirectional overrides can make text display
+// differently from what it contains, so an approval prompt could show the
+// owner one post while another is sent. Anything shown at an owner prompt must
+// be plain printable text: only newline and tab are allowed as controls.
+const DECEPTIVE = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f؜‎‏‪-‮⁦-⁩]/;
+
+export function assertPrintable(value, name, code) {
+  if (typeof value === "string" && DECEPTIVE.test(value))
+    throw new EngineError(code, `${name} contains control or text-direction characters.`);
+  return value;
+}
+
 // Each entry upgrades the schema by one version. SQLite's `user_version`
 // pragma records how many have run, so opening an old file applies only the
 // missing steps. Append new steps; never edit a shipped one.

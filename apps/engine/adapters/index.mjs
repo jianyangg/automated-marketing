@@ -11,6 +11,7 @@ export function channelAdapters(config, { secrets = readSecret } = {}) {
   if (config.channels.threads) {
     const key = config.channels.threads.secret;
     adapters.threads = threadsAdapter({
+      account: config.channels.threads.account,
       credentials: () => {
         const value = secrets(key);
         if (typeof value.userId !== "string" || typeof value.accessToken !== "string")

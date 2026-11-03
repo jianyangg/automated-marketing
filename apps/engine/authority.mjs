@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline/promises";
-import { EngineError, localDate } from "./store.mjs";
+import { EngineError, localDate, assertPrintable } from "./store.mjs";
 import { getAction } from "./actions.mjs";
 
 // Authority comes from the owner typing at a real terminal, never from a flag
@@ -34,9 +34,11 @@ function positiveInteger(value, name) {
 }
 
 export async function addGrant(db, spec, { confirm = terminalConfirm, now = new Date() } = {}) {
-  for (const field of ["channel", "account", "timezone", "statement", "expiresAt"])
+  for (const field of ["channel", "account", "timezone", "statement", "expiresAt"]) {
     if (typeof spec[field] !== "string" || !spec[field].trim())
       throw new EngineError("invalid_grant", `${field} is required.`);
+    assertPrintable(spec[field], field, "invalid_grant");
+  }
   try {
     localDate(now, spec.timezone);
   } catch {

@@ -183,7 +183,17 @@ export function recordReceipt(db, actionId, { url, providerId, absent = false, n
     .prepare(`SELECT * FROM deliveries WHERE action_id = ? AND status IN (${unresolvedSql})`)
     .get(actionId);
   if (!row) throw new EngineError("not_found", `No unresolved delivery for ${actionId}.`);
-  if (absent) return settle(db, row.id, "failed", { error: "Recorded as not published." }, now);
+  // Only a person can know a handoff was never posted. An API send in an
+  // unknown state may be live, and closing it as failed would free the action
+  // and the daily allowance for a duplicate; only `reconcile` can rule it out.
+  if (absent) {
+    if (row.status !== "handoff")
+      throw new EngineError(
+        "reconcile_required",
+        `Delivery ${row.id} is ${row.status}; only reconcile can confirm an API send is absent.`,
+      );
+    return settle(db, row.id, "failed", { error: "Recorded as not published." }, now);
+  }
   if (typeof url !== "string" || !/^https:\/\/\S+$/.test(url))
     throw new EngineError("invalid_receipt", "A receipt needs the live https URL of the post.");
   return settle(db, row.id, "delivered", { url, providerId: providerId ?? null }, now);

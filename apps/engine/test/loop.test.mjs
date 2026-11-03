@@ -49,6 +49,9 @@ test("config rejects guesses: unknown channels, missing time zones, a dangling n
   assert.throws(() => parseConfig({ metrics: [metric] }), /timezone/);
   assert.throws(() => parseConfig({ northStar: "revenue" }), /northStar/);
   assert.deepEqual(parseConfig(undefined).channels, {});
+  const borrowed = { channels: { threads: { account: "a", secret: "otherbrand/threads" } } };
+  assert.throws(() => parseConfig(borrowed, { brand: "sample" }), /must start with "sample\/"/);
+  assert.equal(parseConfig({ channels: { threads: { account: "a", secret: "sample/threads" } } }, { brand: "sample" }).channels.threads.account, "a");
 });
 
 test("pull saves daily readings, keeps unreported days unknown, and lets new numbers revise old ones", async (t) => {
