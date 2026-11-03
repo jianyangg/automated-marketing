@@ -28,7 +28,11 @@ export function nextAction(view, config) {
 function attention(view, config) {
   const items = [];
   for (const item of view.unresolved)
-    items.push(`Delivery ${item.id} for ${item.actionId} is ${item.status}.`);
+    items.push(
+      item.status === "handoff"
+        ? `Post on ${item.channel}: content via \`engine show ${item.actionId}\`, then record its receipt.`
+        : `Delivery ${item.id} for ${item.actionId} on ${item.channel} is ${item.status}; reconcile it.`,
+    );
   if (!view.grants.length && Object.keys(config.channels).length)
     items.push("No active publishing grant: posts need one-off owner approval.");
   for (const grant of view.grants) {
