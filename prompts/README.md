@@ -7,6 +7,7 @@
 | [Session start](session-start.md) | Recover state from the engine and pick the work |
 | [Daily run](daily-run.md) | Reconcile, read results, decide, propose, publish, brief |
 | [Distribution](distribution.md) | Work out how to reach the audience for any proposal, from comparables and venues |
+| [AI visibility](ai-visibility.md) | Get recommended by AI assistants, measured as mention rate |
 | [Onboard](onboard.md) | Add an unrelated business from a private folder |
 | [Strategy](strategy.md) | Diagnose the constraint and choose the lever |
 | [Research](research.md) | Investigate the web, appraise sources, and build traceable secondary evidence |

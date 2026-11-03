@@ -37,7 +37,7 @@ Anything that becomes public copy (social and community posts, launch and direct
 
 ## Strategy discipline
 
-For any proposal ("grow this", "launch that"), work out the distribution yourself with the [distribution procedure](prompts/distribution.md): study how comparable companies at the same stage got traction (`npm run engine -- playbook`), map where the audience already is, improve on what they did, and run cheap tests with kill dates. Posting is one lever, not the strategy. When the north star does not move, the [daily run](prompts/daily-run.md#channel-review) requires a channel review. Destination fixes, search pages, communities, lifecycle email or waiting may beat more posts. Use [strategy](prompts/strategy.md) for diagnosis and [campaign](prompts/campaign.md) for larger creative work.
+For any proposal ("grow this", "launch that"), work out the distribution yourself with the [distribution procedure](prompts/distribution.md): study how comparable companies at the same stage got traction (`npm run engine -- playbook`), map where the audience already is, improve on what they did, and run cheap tests with kill dates. Include [AI visibility](prompts/ai-visibility.md): assistants increasingly answer "what should I use", and they mostly repeat third-party sources. Posting is one lever, not the strategy. When the north star does not move, the [daily run](prompts/daily-run.md#channel-review) requires a channel review. Destination fixes, search pages, communities, lifecycle email or waiting may beat more posts. Use [strategy](prompts/strategy.md) for diagnosis and [campaign](prompts/campaign.md) for larger creative work.
 
 ## Other procedures
 
