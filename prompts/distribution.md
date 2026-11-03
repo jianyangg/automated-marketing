@@ -25,7 +25,7 @@ Pick at most three concurrent tests. Each gets a hypothesis, a tagged variable (
 ## 5. Execute
 
 - **API channels** (Threads today): `propose` → `publish` under the owner's grant.
-- **Site and product changes** (pages, tools, copy): prepare them in the product repository on a branch, verify locally, and leave them ready for the owner to merge. Never deploy to production unasked.
+- **Site and product changes** (pages, tools, copy): prepare them in the product repository on a separate worktree branch (never disturb the owner's working tree), run its tests and build, show the owner the exact public copy, and deploy only after they approve it. Then verify the live result end to end with a full page load.
 - **Person-only channels** (communities, launch sites, directories, outreach, newsletters): `propose --channel <venue>` with the exact ready-to-use content, then `publish --via manual`. The handoff holds the account until a person posts and you record the `receipt`. Never automate posting where the platform expects a person, and never pose as an unaffiliated user. Disclose "we built" in the brand's voice.
 
 ## 6. Learn
