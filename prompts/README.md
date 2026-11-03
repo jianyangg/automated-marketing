@@ -1,12 +1,13 @@
 # CMO workflow prompts
 
-`AGENTS.md` routes the Codex agent to the relevant procedure. These instruction-only workflows are usable for manual research/planning/artifact preparation now; installed runtime and external execution remain separate future capabilities.
+`AGENTS.md` routes the agent to the relevant procedure. Execution and records go through the engine (`npm run engine -- --help`). These procedures cover the judgment around it.
 
 | Prompt | Job |
 | --- | --- |
-| [Session start](session-start.md) | Recover status, select scope, and identify actual tools |
+| [Session start](session-start.md) | Recover state from the engine and pick the work |
+| [Daily run](daily-run.md) | Reconcile, read results, decide, propose, publish, brief |
 | [Onboard](onboard.md) | Add an unrelated business from a private folder |
-| [Strategy](strategy.md) | Diagnose the constraint and allocate attention |
+| [Strategy](strategy.md) | Diagnose the constraint and choose the lever |
 | [Research](research.md) | Investigate the web, appraise sources, and build traceable secondary evidence |
 | [Validation](validation.md) | Resolve uncertainty without forcing a campaign |
 | [Campaign](campaign.md) | Produce complete, connected deliverables |
@@ -15,4 +16,4 @@
 | [Learn](learn.md) | Turn observed results into a decision |
 | [Response format](response-format.md) | Keep operator updates concise and customer copy self-contained |
 
-The prompts do not install tools, grant account access, create recurring jobs, or authorize publication/spending. Focused repo skills can package these procedures after the runtime is implemented; duplicate copies must not become conflicting authorities.
+Prompts never grant account access or authorize publishing or spending. Only the owner's `grant` or `approve`, typed in their own terminal, does.

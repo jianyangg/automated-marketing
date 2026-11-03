@@ -27,7 +27,7 @@ Returns, conversions and percentage improvements remain unknown unless valid evi
 
 Keep business-specific files under ignored `brands/<business>/`. Generic dashboard code and fictional fixtures belong in the public framework.
 
-`index.md` remains the operating brief: title, `**Confirmed goal:**`, `**Next action:**`, `Record | Status` links and `## Current dependencies` bullets. All linked work remains available in a collapsed records section.
+`index.md` remains the operating brief: title, `**Confirmed goal:**`, `**Next action:**`, `Record | Status` links and `## Needs your attention` (or `## Current dependencies`) bullets. All linked work remains available in a collapsed records section. With the engine, `npm run engine -- brief --brand <business>` generates it and writes `reports/engine-snapshot.json`; point a metric at `/metrics/<name>/latest` with series pointer `/metrics/<name>/daily`, date `/date`, value `/value`, observed time `/observedAt`.
 
 Optional `dashboard.json` configures up to twelve metrics:
 

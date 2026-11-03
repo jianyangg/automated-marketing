@@ -4,7 +4,7 @@
 
 Codex researches your market, recommends what to do next, and prepares website copy, articles, emails, social posts, or a marketing plan. No marketing experience needed.
 
-**Early stage:** instructions, templates, and a local read-only dashboard work today. This repository has no built-in publisher or scheduler; Codex can use its own scheduled tasks and tools you connect.
+**Early stage:** a local engine records every proposal, permission, post and result, and publishes to Threads through Meta's official API. Other channels use a manual handoff. Codex's own scheduled tasks run the daily loop.
 
 ## Get started
 
@@ -25,6 +25,25 @@ You shouldn't need to prompt every work session. Tell Codex:
 > Work on my marketing every weekday at 9 AM in my time zone. Research the market, check results, carry out the most useful action within my permissions, and improve the plan. Tell me when something useful happens or you need my help.
 
 Codex should reuse an existing schedule, agree what it may do publicly and when to interrupt you, and track what shipped, what happened, and what changes next. Improvements draw on research, real founders' experience and your results. Local tasks need your computer on and Codex running. [Operating loop](docs/cmo-operating-model.md#7-cadence-and-attention).
+
+## Engine
+
+Each business keeps its state in `brands/<business>/.state/engine.sqlite`. Codex runs `npm run engine -- <command> --brand <business>` (`--help` lists commands). Three steps are yours, because the engine accepts permission only from you at your own terminal:
+
+1. **Connect Threads.** Create a Meta app with `threads_basic`, `threads_content_publish` and `threads_manage_insights`, get a long-lived token, then store it (paste `{"userId": "...", "accessToken": "..."}` at the prompt):
+
+   ```sh
+   security add-generic-password -U -s automated-marketing -a <business>/threads -w
+   ```
+
+2. **Connect analytics (optional, recommended).** For Mixpanel, store a service account as `{"username": "...", "secret": "..."}` under `<business>/mixpanel` the same way, and tell Codex the project's time zone.
+3. **Grant permission.** For example, one post a day for 30 days, paused after two failures:
+
+   ```sh
+   npm run engine -- grant --brand <business> --channel threads --account <handle> --max-per-day 1 --timezone America/New_York --pause-after-failures 2 --expires 2026-12-31 --statement "One original post per day to @<handle> on Threads"
+   ```
+
+   Or approve posts one at a time with `npm run engine -- approve <action> --brand <business>`.
 
 ## Dashboard
 

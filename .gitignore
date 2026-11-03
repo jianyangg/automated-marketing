@@ -11,9 +11,11 @@
 !/examples/
 !/brands/
 !/package.json
+!/.nvmrc
 !/apps/
 /apps/*
 !/apps/dashboard/
+!/apps/engine/
 
 # Owner workspaces are private; distributable fixtures live in examples/.
 /brands/*

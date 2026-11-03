@@ -1,6 +1,6 @@
 # Architecture and operating contracts
 
-Proposed execution architecture, October 13, 2026. The [read-only local dashboard](dashboard.md) is implemented separately in `apps/dashboard/`: dependency-free Node.js, private brand files and no execution endpoints. The runtime, CLI, MCP, worker, database and connector contracts below remain proposed software, not installed capabilities.
+Proposed execution architecture, October 13, 2026. **Implemented November 2026:** `apps/engine/`, a dependency-free Node.js CLI over per-brand SQLite (Node's built-in `node:sqlite`) with actions, owner grants and approvals, idempotent deliveries with reconciliation, observations, decisions, a generated brief, Keychain secrets, a manual-handoff adapter, an official Threads adapter and a Mixpanel reader. The [read-only dashboard](dashboard.md) reads its generated files. Still proposed: MCP, a background worker, further connectors, and the broader record groups below.
 
 ## 1. System boundary
 

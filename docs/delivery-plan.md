@@ -1,6 +1,6 @@
 # Delivery plan and release gates
 
-Specification, October 13, 2026. This document defines future execution-runtime evidence; listing a test does not mean it passed. Root guidelines and workflows support manual work. The [read-only dashboard](dashboard.md), added October 15, supplies local file-based oversight; the transactional execution runtime remains unimplemented.
+Specification, October 13, 2026. This document defines future execution-runtime evidence; listing a test does not mean it passed. Root guidelines and workflows support manual work. The [read-only dashboard](dashboard.md), added October 15, supplies local file-based oversight. S1, S2 state and S4 for one channel are implemented in `apps/engine/` (November 2026): SQLite state, owner grants, idempotent delivery with reconciliation, the Threads adapter and a Mixpanel reader, covered by `npm test`. Real-account commissioning of the Threads adapter has not yet run.
 
 ## 1. Product assessment
 

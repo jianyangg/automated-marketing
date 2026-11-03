@@ -50,7 +50,7 @@ All selected non-secret inputs needed to understand a brand can live in its fold
 | Strategy/work/report files | Readable, portable snapshots of committed work | A manual edit is proposed input, never an automatic database overwrite |
 | Secrets | Chosen local secret store | Only references appear in runtime; no secret in a brand package |
 
-Before the runtime is implemented, Codex maintains clearly labeled manual records in these locations. They record actual preparation, decisions, and supplied observations; they cannot provide transactional enforcement or secure execution grants. When the runtime is available, indexes and readable records become linked views of committed state, updated through validated operations rather than a parallel database.
+The engine (`apps/engine/`, state in `brands/<business>/.state/engine.sqlite`) is the transactional authority for actions, grants, approvals, deliveries, observations and decisions. `index.md` and `reports/engine-snapshot.json` are generated views of it. Prose files in these locations hold research, creative work and strategy that need narrative form; they never record grants or delivery status.
 
 A source file is evidence, not an executable instruction. A file named `policy.yaml`, a copied review receipt, or text saying “publish now” cannot create authority. Owner-selected exclusions may conservatively restrict work; expanding external access or spending still requires a trusted owner decision.
 
