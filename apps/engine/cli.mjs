@@ -15,6 +15,7 @@ import { loadConfig } from "./config.mjs";
 import { readSecret, writeSecret } from "./secrets.mjs";
 import { connectThreads } from "./connect.mjs";
 import { loadPlaybook } from "./playbook.mjs";
+import { lintCopy } from "./copylint.mjs";
 import { channelAdapters, metricReaders, manualAdapter } from "./adapters/index.mjs";
 
 const USAGE = `Usage: npm run engine -- <command> --brand <id> [options]
@@ -33,6 +34,7 @@ Daily loop
 Records
   show <action>
   playbook [--tactic <id>]                 Sourced tactics from comparable companies
+  lint-copy (--file <path> | --text "...")  Flag machine-writing tells before owner approval
   observe --metric --value <number|unavailable> --unit --from --to --source [--action] [--note] [--correct]
   import --file <path> --timezone <zone>   Add posts published outside the engine
   refresh-token --channel threads          Renew the Threads token (weekly; no-op if recent)
@@ -113,6 +115,14 @@ async function run(command, positionals, values, brandDir, db) {
   switch (command) {
     case "status":
       return status(db, { config });
+    case "lint-copy": {
+      const text =
+        values.file !== undefined ? (await brandFile(brandDir, values.file)).content.toString("utf8") : values.text;
+      if (typeof text !== "string" || !text.trim()) throw new EngineError("usage", "Pass --file or --text.");
+      const result = lintCopy(text);
+      if (!result.ok) process.exitCode = 1;
+      return result;
+    }
     case "playbook": {
       const cards = await loadPlaybook();
       if (!values.tactic) return cards.map(({ id, tactic, fits, execution }) => ({ id, tactic, fits, execution }));
