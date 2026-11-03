@@ -27,6 +27,7 @@ Pick at most three concurrent tests. Each gets a hypothesis, a tagged variable (
 - **API channels** (Threads today): `propose` → `publish` under the owner's grant.
 - **Site and product changes** (pages, tools, copy): prepare them in the product repository on a separate worktree branch (never disturb the owner's working tree), run its tests and build, show the owner the exact public copy, and deploy only after they approve it. Then verify the live result end to end with a full page load.
 - **Person-only channels** (communities, launch sites, directories, outreach, newsletters): `propose --channel <venue>` with the exact ready-to-use content, then `publish --via manual`. The handoff holds the account until a person posts and you record the `receipt`. Never automate posting where the platform expects a person, and never pose as an unaffiliated user. Disclose "we built" in the brand's voice.
+- **Account readiness before any community post.** Check the posting account first: its age, its history of ordinary participation in that community, and the venue's live self-promotion rule. A new or link-only account posting its own domain is what spam filters target, and a site-wide shadowban takes every community off the table at once. If the account is not ready, the first step is weeks of genuine comments without links. If an account is restricted, stop all posting of that domain from it, appeal once, and never work around it with a new account (ban evasion makes it permanent).
 
 ## 6. Learn
 
