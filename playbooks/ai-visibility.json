@@ -7,47 +7,102 @@
       "id": "earned-list-inclusion",
       "tactic": "Get included in the third-party pages assistants already cite for the category: 'best X' roundups, alternative directories, review sites. Pitch editors with a specific angle; list on directories.",
       "fits": "Any product; the main lever for small brands with no AI visibility.",
+      "lever": "outreach",
       "execution": "handoff",
       "cases": [
-        { "company": "To-do app category", "what": "zapier.com was 34% of citations in to-do app answers (one roundup 27%); reddit.com 25%; techradar.com 13% (ChatGPT + AI Mode, 442 responses, Jul–Nov 2026)", "source": "https://parse.gl/prompts/p/what-is-the-best-to-do-list-app--246e7b66-4996-471e-9ac0-94c3a69c66e4", "sourceType": "vendor" },
-        { "company": "Cross-industry", "what": "AI search shows systematic bias toward earned third-party media over brand-owned pages", "source": "https://arxiv.org/abs/2509.08919", "sourceType": "preprint" },
-        { "company": "75k brands", "what": "Web brand mentions correlate 0.664 with AI Overview visibility vs 0.218 for backlinks", "source": "https://ahrefs.com/blog/ai-overview-brand-correlation", "sourceType": "vendor" }
+        {
+          "company": "To-do app category",
+          "what": "zapier.com was 34% of citations in to-do app answers (one roundup 27%); reddit.com 25%; techradar.com 13% (ChatGPT + AI Mode, 442 responses, Jul–Nov 2026)",
+          "source": "https://parse.gl/prompts/p/what-is-the-best-to-do-list-app--246e7b66-4996-471e-9ac0-94c3a69c66e4",
+          "sourceType": "vendor"
+        },
+        {
+          "company": "Cross-industry",
+          "what": "AI search shows systematic bias toward earned third-party media over brand-owned pages",
+          "source": "https://arxiv.org/abs/2509.08919",
+          "sourceType": "preprint"
+        },
+        {
+          "company": "75k brands",
+          "what": "Web brand mentions correlate 0.664 with AI Overview visibility vs 0.218 for backlinks",
+          "source": "https://ahrefs.com/blog/ai-overview-brand-correlation",
+          "sourceType": "vendor"
+        }
       ],
-      "counterEvidence": ["Correlational and vendor-measured; whether a given pitch lands is unknown."],
+      "counterEvidence": [
+        "Correlational and vendor-measured; whether a given pitch lands is unknown."
+      ],
       "transferLimits": "Editors include products with users or a distinctive angle; pitch after there is something to show."
     },
     {
       "id": "specific-need-pages",
       "tactic": "Answer-first pages for specific needs the product meets (constraints, use cases), enriched with real cited statistics and quotations.",
       "fits": "Small brands that cannot win generic 'best X' questions.",
+      "lever": "seo",
       "execution": "site-branch",
       "cases": [
-        { "company": "Brand recommendation study", "what": "Brands absent from generic answers appear when the question carries distinctive needs or constraints", "source": "https://arxiv.org/abs/2609.16304", "sourceType": "preprint" },
-        { "company": "GEO benchmark", "what": "Adding quotations (~+41%), statistics (~+33%) and cited sources (~+28%) raised visibility in generative answers, most for low-ranked sources", "source": "https://arxiv.org/html/2311.09735v3", "sourceType": "peer-reviewed" }
+        {
+          "company": "Brand recommendation study",
+          "what": "Brands absent from generic answers appear when the question carries distinctive needs or constraints",
+          "source": "https://arxiv.org/abs/2609.16304",
+          "sourceType": "preprint"
+        },
+        {
+          "company": "GEO benchmark",
+          "what": "Adding quotations (~+41%), statistics (~+33%) and cited sources (~+28%) raised visibility in generative answers, most for low-ranked sources",
+          "source": "https://arxiv.org/html/2311.09735v3",
+          "sourceType": "peer-reviewed"
+        }
       ],
-      "counterEvidence": ["GEO gains were measured on 2023 engines with fixed source sets; they do not address being retrieved at all."],
+      "counterEvidence": [
+        "GEO gains were measured on 2023 engines with fixed source sets; they do not address being retrieved at all."
+      ],
       "transferLimits": "Never fabricate statistics or quotes; cite real sources."
     },
     {
       "id": "search-indexing",
       "tactic": "Make sure the site is indexed where assistants retrieve: Google Search Console, Bing Webmaster Tools (Copilot citation report), IndexNow; allow search crawlers (OAI-SearchBot, Claude-SearchBot, PerplexityBot).",
       "fits": "Every site; prerequisite for live-retrieval visibility.",
+      "lever": "seo",
       "execution": "handoff",
       "cases": [
-        { "company": "Google", "what": "AI features require indexing and snippet eligibility; no special optimizations or AI text files needed", "source": "https://developers.google.com/search/docs/appearance/ai-features", "sourceType": "platform" },
-        { "company": "OpenAI", "what": "OAI-SearchBot determines appearance in ChatGPT search; GPTBot (training) is separate", "source": "https://developers.openai.com/api/docs/bots", "sourceType": "platform" },
-        { "company": "Anthropic", "what": "Claude-SearchBot indexes for search; blocking it reduces visibility", "source": "https://support.claude.com/en/articles/8896518", "sourceType": "platform" }
+        {
+          "company": "Google",
+          "what": "AI features require indexing and snippet eligibility; no special optimizations or AI text files needed",
+          "source": "https://developers.google.com/search/docs/appearance/ai-features",
+          "sourceType": "platform"
+        },
+        {
+          "company": "OpenAI",
+          "what": "OAI-SearchBot determines appearance in ChatGPT search; GPTBot (training) is separate",
+          "source": "https://developers.openai.com/api/docs/bots",
+          "sourceType": "platform"
+        },
+        {
+          "company": "Anthropic",
+          "what": "Claude-SearchBot indexes for search; blocking it reduces visibility",
+          "source": "https://support.claude.com/en/articles/8896518",
+          "sourceType": "platform"
+        }
       ],
-      "counterEvidence": ["llms.txt: 97% of files received no requests and Google does not support it (https://ahrefs.com/blog/llmstxt-study)."],
+      "counterEvidence": [
+        "llms.txt: 97% of files received no requests and Google does not support it (https://ahrefs.com/blog/llmstxt-study)."
+      ],
       "transferLimits": "Necessary, not sufficient."
     },
     {
       "id": "entity-mentions",
       "tactic": "Build consistent, independent mentions on crawled sites (same name everywhere, sameAs links in Organization schema) so future models learn the product exists.",
       "fits": "Long horizon; compounds with every other tactic.",
+      "lever": "outreach",
       "execution": "site-branch",
       "cases": [
-        { "company": "Language models", "what": "A model's knowledge of an entity scales with how many training documents mention it", "source": "https://arxiv.org/abs/2211.08411", "sourceType": "peer-reviewed" }
+        {
+          "company": "Language models",
+          "what": "A model's knowledge of an entity scales with how many training documents mention it",
+          "source": "https://arxiv.org/abs/2211.08411",
+          "sourceType": "peer-reviewed"
+        }
       ],
       "counterEvidence": [],
       "transferLimits": "Training cutoffs lag months to years; Common Crawl inclusion cannot be forced. Wikipedia requires independent coverage first."
@@ -56,9 +111,15 @@
       "id": "ai-mention-tracking",
       "tactic": "Measure AI visibility as mention rate across repeated runs of fixed, unbranded, specific-need prompts per engine, monthly; record cited URLs.",
       "fits": "Every brand doing GEO work.",
+      "lever": "measurement",
       "execution": "handoff",
       "cases": [
-        { "company": "SparkToro / Gumshoe", "what": "The same prompt rarely returns the same list twice; appearance rate is steadier than position", "source": "https://sparktoro.com/blog/", "sourceType": "vendor" }
+        {
+          "company": "SparkToro / Gumshoe",
+          "what": "The same prompt rarely returns the same list twice; appearance rate is steadier than position",
+          "source": "https://sparktoro.com/blog/",
+          "sourceType": "vendor"
+        }
       ],
       "counterEvidence": [],
       "transferLimits": "Requires access to each assistant; record unavailable engines as unavailable, never zero."

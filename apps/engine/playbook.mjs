@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import { EngineError } from "./store.mjs";
+import { LEVERS } from "./bets.mjs";
 
 // The shared playbook: public, sourced tactics that worked for comparable
 // companies. A brand tags each test with `tactic=<id>` so its own results
@@ -19,6 +20,9 @@ export function validatePlaybook(data, file) {
     if (!/^[a-z0-9-]+$/.test(card.id ?? "")) fail(`bad id ${card.id}.`);
     if (ids.has(card.id)) fail(`duplicate id ${card.id}.`);
     ids.add(card.id);
+    // The lever ties a public tactic to the bets that use it, so a brand's
+    // own results can be compared with the public record.
+    if (!LEVERS.includes(card.lever)) fail(`${card.id}: lever must be one of ${LEVERS.join(", ")}.`);
     if (!ROUTES.includes(card.execution)) fail(`${card.id}: execution must be one of ${ROUTES.join(", ")}.`);
     if (!card.cases?.length) fail(`${card.id}: at least one case is required.`);
     for (const item of card.cases)

@@ -71,13 +71,22 @@ export async function prepareAction(brandDir, spec, { now = new Date() } = {}) {
   if (variable !== null && !/^[a-z0-9_-]+=[^=\s][^=]*$/i.test(variable))
     throw new EngineError("invalid_action", 'variable must look like "hook=question".');
   const assets = await hashAssets(brandDir, spec.assets ?? []);
+  const betId = spec.betId ?? null;
   const payload = { text, assets };
   const id = `act_${now.toISOString().slice(0, 10).replaceAll("-", "")}_${randomBytes(3).toString("hex")}`;
-  const insert = (db) =>
-    db
+  const insert = (db) => {
+    // A post is work inside a bet. Linking it lets the bet's review see what
+    // was actually published for it.
+    if (betId !== null) {
+      const bet = db.prepare("SELECT status FROM bets WHERE id = ?").get(betId);
+      if (!bet) throw new EngineError("invalid_action", `No bet ${betId}.`);
+      if (!["proposed", "running"].includes(bet.status))
+        throw new EngineError("invalid_action", `Bet ${betId} is ${bet.status}; attach new work to an open bet.`);
+    }
+    return db
       .prepare(
-        `INSERT INTO actions (id, channel, account, hypothesis, variable, payload, content_hash, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO actions (id, channel, account, hypothesis, variable, payload, content_hash, created_at, bet_id)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         id,
@@ -88,7 +97,9 @@ export async function prepareAction(brandDir, spec, { now = new Date() } = {}) {
         JSON.stringify(payload),
         contentHash({ channel, account, ...payload }),
         now.toISOString(),
+        betId,
       );
+  };
   insert.id = id;
   return insert;
 }
@@ -106,7 +117,22 @@ export function getAction(db, id) {
     contentHash: row.content_hash,
     createdAt: row.created_at,
     approved: row.approved_hash === row.content_hash,
+    betId: row.bet_id,
+    withdrawn: row.withdrawn_at !== null,
   };
+}
+
+// Takes a proposal out of the queue for good. Anything that may already be
+// live (attempting, unknown, handoff, delivered) cannot be withdrawn: it has
+// to be reconciled, because withdrawing it would hide a possible public post.
+export function withdrawAction(db, id, reason, { now = new Date() } = {}) {
+  const action = getAction(db, id);
+  if (action.withdrawn) throw new EngineError("invalid_action", `${id} is already withdrawn.`);
+  const live = db.prepare("SELECT status FROM deliveries WHERE action_id = ? AND status != 'failed'").get(id);
+  if (live) throw new EngineError("invalid_action", `${id} has a ${live.status} delivery; it cannot be withdrawn.`);
+  const why = required(reason, "reason");
+  db.prepare("UPDATE actions SET withdrawn_at = ?, withdrawn_reason = ? WHERE id = ?").run(now.toISOString(), why, id);
+  return getAction(db, id);
 }
 
 // Re-reads the assets right before sending. If a file changed since the

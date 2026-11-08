@@ -81,6 +81,8 @@ export async function pull(db, { config, adapters, readers, now = new Date(), da
   }
 
   for (const metric of config.metrics) {
+    // Manual metrics have no API; their readings arrive through `observe`.
+    if (metric.provider === "manual") continue;
     const reader = readers[metric.provider];
     if (!reader) {
       errors.push({ source: metric.provider, message: `No reader for ${metric.provider}.` });

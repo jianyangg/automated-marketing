@@ -47,6 +47,10 @@ function settle(db, id, status, { providerId = null, url = null, error = null },
 // approval is needed for the handoff itself; duplicate protection still applies.
 function reserve(db, action, now, { byPerson = false } = {}) {
   return transaction(db, () => {
+    // Re-checked under the write lock, so a withdrawal that lands while a send
+    // is being prepared still stops it.
+    if (db.prepare("SELECT withdrawn_at FROM actions WHERE id = ?").get(action.id)?.withdrawn_at)
+      throw new EngineError("withdrawn", `${action.id} was withdrawn and will not be sent.`);
     const live = db
       .prepare("SELECT * FROM deliveries WHERE action_id = ? AND status != 'failed'")
       .get(action.id);
@@ -111,6 +115,7 @@ function reserve(db, action, now, { byPerson = false } = {}) {
 
 export async function publish(db, brandDir, actionId, { adapters, now = new Date() }) {
   const action = getAction(db, actionId);
+  if (action.withdrawn) throw new EngineError("withdrawn", `${actionId} was withdrawn and will not be sent.`);
   const adapter = adapters[action.channel];
   if (!adapter)
     throw new EngineError("no_adapter", `No adapter is configured for ${action.channel}.`);

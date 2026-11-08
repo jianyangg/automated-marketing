@@ -1,4 +1,8 @@
 import { localDate } from "./store.mjs";
+import { funnelView } from "./funnel.mjs";
+import { listBets } from "./bets.mjs";
+import { marketView } from "./market.mjs";
+import { inbox, agenda } from "./agenda.mjs";
 
 // The one view a scheduled run reads first: what is blocked, what is
 // queued, how much of today's allowance is left, the latest numbers, and
@@ -12,19 +16,38 @@ export function status(db, { now = new Date(), limit = 5, config = null } = {}) 
     .all(now.toISOString())
     .map((grant) => {
       const today = localDate(now, grant.timezone);
-      const { used } = db
-        .prepare(
-          `SELECT count(*) AS used FROM deliveries
-           WHERE channel = ? AND account = ? AND status != 'failed' AND local_date = ?`,
-        )
-        .get(grant.channel, grant.account, today);
+      const sameDay = (iso) => localDate(new Date(iso), grant.timezone) === today;
+      // What "used today" means depends on the kind: posts sent, replies
+      // recorded, or charges made under this grant.
+      let usedToday;
+      if (grant.kind === "post")
+        usedToday = db
+          .prepare(
+            `SELECT count(*) AS used FROM deliveries
+             WHERE channel = ? AND account = ? AND status != 'failed' AND local_date = ?`,
+          )
+          .get(grant.channel, grant.account, today).used;
+      else if (grant.kind === "reply")
+        usedToday = db
+          .prepare(
+            `SELECT closed_at FROM tasks WHERE kind = 'reply' AND executor = 'agent' AND status = 'done'
+               AND channel = ? AND account = ?`,
+          )
+          .all(grant.channel, grant.account)
+          .filter((row) => sameDay(row.closed_at)).length;
+      else usedToday = db.prepare("SELECT at FROM costs WHERE grant_id = ?").all(grant.id).filter((row) => sameDay(row.at)).length;
       return {
         id: grant.id,
+        kind: grant.kind,
         channel: grant.channel,
         account: grant.account,
         today,
-        usedToday: used,
+        usedToday,
         maxPerDay: grant.max_per_day,
+        ...(grant.kind === "spend" && {
+          capUsd: grant.cap_usd,
+          spentUsd: db.prepare("SELECT ifnull(sum(amount), 0) AS total FROM costs WHERE grant_id = ?").get(grant.id).total,
+        }),
         expiresAt: grant.expires_at,
       };
     });
@@ -39,9 +62,10 @@ export function status(db, { now = new Date(), limit = 5, config = null } = {}) 
   // Proposed = no attempt that might have reached the audience yet.
   const proposed = db
     .prepare(
-      `SELECT a.id, a.channel, a.account, a.hypothesis, a.approved_hash = a.content_hash AS approved
+      `SELECT a.id, a.channel, a.account, a.bet_id AS betId, a.hypothesis,
+         a.approved_hash = a.content_hash AS approved
        FROM actions a
-       WHERE NOT EXISTS (SELECT 1 FROM deliveries d WHERE d.action_id = a.id AND d.status != 'failed')
+       WHERE a.withdrawn_at IS NULL AND NOT EXISTS (SELECT 1 FROM deliveries d WHERE d.action_id = a.id AND d.status != 'failed')
        ORDER BY a.created_at DESC LIMIT ?`,
     )
     .all(limit)
@@ -74,9 +98,19 @@ export function status(db, { now = new Date(), limit = 5, config = null } = {}) 
     )
     .all(limit);
 
-  return {
+  const view = {
     at: now.toISOString(),
     northStar: config?.northStar ? northStar(db, config.northStar, now) : null,
+    funnel: config ? funnelView(db, config, now) : null,
+    bets: listBets(db, { status: "running", now }).map(({ id, title, lever, funnelStage, killAt, score, overCap }) => ({
+      id,
+      title,
+      lever,
+      funnelStage,
+      killAt,
+      score,
+      overCap,
+    })),
     grants,
     unresolved,
     proposed,
@@ -84,6 +118,21 @@ export function status(db, { now = new Date(), limit = 5, config = null } = {}) 
     experiments: experiments(db, now),
     latest,
     decisions,
+    shipped: shipped(db, now),
+    market: marketView(db, now),
+    inbox: inbox(db, now),
+  };
+  view.agenda = config ? agenda(db, config, view, now) : [];
+  return view;
+}
+
+// What actually went out in the last 7 days: posts with a receipt and tasks
+// marked done. Proposals and drafts do not count as shipped.
+function shipped(db, now) {
+  const since = new Date(now.getTime() - 7 * 86_400_000).toISOString();
+  return {
+    posts: db.prepare("SELECT count(*) AS n FROM deliveries WHERE status = 'delivered' AND settled_at >= ?").get(since).n,
+    tasks: db.prepare("SELECT count(*) AS n FROM tasks WHERE status = 'done' AND closed_at >= ?").get(since).n,
   };
 }
 

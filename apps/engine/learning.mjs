@@ -1,4 +1,6 @@
 import { EngineError, transaction } from "./store.mjs";
+import { RATIONALE_LIMIT } from "./bets.mjs";
+import { validAuthor } from "./funnel.mjs";
 
 function readingView(row) {
   return {
@@ -88,6 +90,11 @@ export function decide(db, spec, { now = new Date() } = {}) {
     throw new EngineError("invalid_decision", `verdict must be one of ${VERDICTS.join(", ")}.`);
   if (typeof spec.rationale !== "string" || !spec.rationale.trim())
     throw new EngineError("invalid_decision", "rationale is required.");
+  // Short on purpose: the evidence ids carry the detail. Long rationales were
+  // where hedging and retelling piled up.
+  if (spec.rationale.trim().length > RATIONALE_LIMIT)
+    throw new EngineError("invalid_decision", `rationale must fit in ${RATIONALE_LIMIT} characters; cite evidence ids for the detail.`);
+  const by = spec.by === undefined ? null : validAuthor(spec.by);
   const evidence = [...new Set(spec.evidence ?? [])];
   // Waiting needs no proof; changing course does.
   if (spec.verdict !== "wait" && !evidence.length)
@@ -100,8 +107,8 @@ export function decide(db, spec, { now = new Date() } = {}) {
     throw new EngineError("invalid_decision", "reviewAt must be an ISO date-time.");
   const { lastInsertRowid } = db
     .prepare(
-      `INSERT INTO decisions (action_id, verdict, rationale, evidence, review_at, decided_at)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO decisions (action_id, verdict, rationale, evidence, review_at, decided_at, recorded_by)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
     )
     .run(
       spec.actionId ?? null,
@@ -110,6 +117,7 @@ export function decide(db, spec, { now = new Date() } = {}) {
       JSON.stringify(evidence),
       reviewAt?.toISOString() ?? null,
       now.toISOString(),
+      by,
     );
   return {
     id: Number(lastInsertRowid),

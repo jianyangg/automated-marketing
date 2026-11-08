@@ -126,15 +126,9 @@ test("status compares average daily north star, and groups results by tagged var
   );
 });
 
-test("next action follows a fixed order of urgency", () => {
-  const base = { unresolved: [], grants: [], proposed: [] };
-  assert.match(nextAction({ ...base, unresolved: [{ id: 1, status: "unknown" }] }, config), /Reconcile delivery 1/);
-  assert.match(nextAction(base, { ...config, channels: {} }), /configure a publishing channel/);
-  assert.match(nextAction(base, config), /Owner: grant/);
-  const open = [{ channel: "threads", usedToday: 0, maxPerDay: 1 }];
-  assert.match(nextAction({ ...base, grants: open }, config), /Propose today's threads post/);
-  assert.match(nextAction({ ...base, grants: open, proposed: [{ id: "a1", channel: "threads" }] }, config), /Publish a1/);
-  assert.match(nextAction({ ...base, grants: [{ ...open[0], usedToday: 1 }] }, config), /Pull results/);
+test("next action is the top of the agenda, with a plain fallback", () => {
+  assert.match(nextAction({ agenda: [{ kind: "reconcile", text: "Reconcile delivery 1 (unknown)." }] }), /Reconcile delivery 1/);
+  assert.match(nextAction({ agenda: [] }), /Nothing urgent/);
 });
 
 test("the generated brief stays small, archives a hand-written one, and still parses in the dashboard", async (t) => {
@@ -150,8 +144,10 @@ test("the generated brief stays small, archives a hand-written one, and still pa
   assert.ok(Buffer.byteLength(brief) <= BRIEF_LIMIT);
   const parsed = parseIndex(brief, "sample");
   assert.equal(parsed.goal, "More active users");
-  assert.match(parsed.nextAction, /Owner: grant/);
-  assert.ok(parsed.attention.some((item) => /No publishing grant|No active publishing grant/.test(item)));
+  // With no funnel configured, finding the constraint is impossible, so that
+  // is the first thing the agent is told to fix.
+  assert.match(parsed.nextAction, /Add a funnel to engine.json/);
+  assert.deepEqual(parsed.attention, ["Nothing waiting on you."]);
   assert.equal(parsed.work[0].source, written.archived);
   // Regenerating over a generated brief needs no flag and archives nothing.
   assert.equal((await writeBrief(ctx.brand, view, config)).archived, null);

@@ -48,7 +48,19 @@ export async function addGrant(db, spec, { confirm = terminalConfirm, now = new 
   const expires = new Date(spec.expiresAt);
   if (Number.isNaN(expires.getTime()) || expires <= now)
     throw new EngineError("invalid_grant", "expiresAt must be a future date.");
+  const kind = spec.kind ?? "post";
+  if (!GRANT_KINDS.includes(kind))
+    throw new EngineError("invalid_grant", `kind must be one of ${GRANT_KINDS.join(", ")}.`);
+  // A spend grant without a total cap would be an open checkbook.
+  let capUsd = null;
+  if (kind === "spend") {
+    capUsd = Number(spec.capUsd);
+    if (spec.capUsd === undefined || !Number.isFinite(capUsd) || capUsd <= 0)
+      throw new EngineError("invalid_grant", "A spend grant needs --cap-usd, the total it may ever spend.");
+  } else if (spec.capUsd !== undefined)
+    throw new EngineError("invalid_grant", "--cap-usd applies only to spend grants.");
   const grant = {
+    kind,
     channel: spec.channel.trim(),
     account: spec.account.trim(),
     maxPerDay: positiveInteger(spec.maxPerDay, "maxPerDay"),
@@ -56,25 +68,35 @@ export async function addGrant(db, spec, { confirm = terminalConfirm, now = new 
     pauseAfterFailures: positiveInteger(spec.pauseAfterFailures, "pauseAfterFailures"),
     expiresAt: expires.toISOString(),
     statement: spec.statement.trim(),
+    capUsd,
   };
+  const scope = {
+    post: [`  At most ${grant.maxPerDay} original post(s) per day (${grant.timezone}).`, "  No replies, spending or settings changes."],
+    reply: [`  At most ${grant.maxPerDay} public repl(ies) per day (${grant.timezone}).`, "  No original posts, DMs, spending or settings changes."],
+    spend: [
+      `  At most $${grant.capUsd} in total, in at most ${grant.maxPerDay} charge(s) per day (${grant.timezone}).`,
+      "  Each charge must also fit the cap of the bet it is recorded against.",
+    ],
+  }[kind];
   await confirmed(
     confirm,
     [
-      `Standing permission for ${grant.channel} @${grant.account}:`,
+      `Standing ${kind} permission for ${grant.channel} @${grant.account}:`,
       `  "${grant.statement}"`,
-      `  At most ${grant.maxPerDay} post(s) per day (${grant.timezone}).`,
+      ...scope,
       `  Pauses after ${grant.pauseAfterFailures} consecutive failure(s).`,
-      `  Expires ${grant.expiresAt}. No replies, spending or settings changes.`,
+      `  Expires ${grant.expiresAt}.`,
     ].join("\n"),
     "grant",
   );
   const { lastInsertRowid } = db
     .prepare(
-      `INSERT INTO grants (channel, account, max_per_day, timezone, pause_after_failures,
-         expires_at, statement, authorized_via, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'owner-terminal', ?)`,
+      `INSERT INTO grants (kind, channel, account, max_per_day, timezone, pause_after_failures,
+         expires_at, statement, cap_usd, authorized_via, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'owner-terminal', ?)`,
     )
     .run(
+      grant.kind,
       grant.channel,
       grant.account,
       grant.maxPerDay,
@@ -82,10 +104,13 @@ export async function addGrant(db, spec, { confirm = terminalConfirm, now = new 
       grant.pauseAfterFailures,
       grant.expiresAt,
       grant.statement,
+      grant.capUsd,
       now.toISOString(),
     );
   return { id: Number(lastInsertRowid), ...grant };
 }
+
+export const GRANT_KINDS = ["post", "reply", "spend"];
 
 export async function revokeGrant(db, id, { confirm = terminalConfirm, now = new Date() } = {}) {
   const grant = db.prepare("SELECT * FROM grants WHERE id = ? AND revoked_at IS NULL").get(id);
@@ -94,14 +119,16 @@ export async function revokeGrant(db, id, { confirm = terminalConfirm, now = new
   db.prepare("UPDATE grants SET revoked_at = ? WHERE id = ?").run(now.toISOString(), id);
 }
 
-export function activeGrant(db, channel, account, now) {
+// The newest live grant of one kind for one account. Kinds never stand in for
+// each other: a posting grant does not allow replies or spending.
+export function activeGrant(db, channel, account, now, kind = "post") {
   return db
     .prepare(
       `SELECT * FROM grants
-       WHERE channel = ? AND account = ? AND revoked_at IS NULL AND expires_at > ?
+       WHERE kind = ? AND channel = ? AND account = ? AND revoked_at IS NULL AND expires_at > ?
        ORDER BY id DESC LIMIT 1`,
     )
-    .get(channel, account, now.toISOString());
+    .get(kind, channel, account, now.toISOString());
 }
 
 // Approves one exact action. The approval stores the content hash it was
