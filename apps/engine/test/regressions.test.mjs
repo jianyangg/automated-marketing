@@ -213,3 +213,20 @@ test("competitor pages are fetched only from public https hosts, on every redire
   assert.match(result.error, /not a public address/);
   assert.equal(result.path, undefined);
 });
+
+test("one deadline covers a page and all its redirects, however slowly the server drips", async () => {
+  // Each hop answers just inside any idle limit, redirecting forever-ish; only
+  // the overall deadline can stop it. The stub honours the abort signal the
+  // way https.request does.
+  const drip = (url, { signal }) =>
+    new Promise((resolve, reject) => {
+      const timer = setTimeout(() => resolve({ ok: false, status: 302, headers: { get: () => `${url}x` }, text: async () => "" }), 40);
+      signal.addEventListener("abort", () => {
+        clearTimeout(timer);
+        reject(signal.reason);
+      });
+    });
+  const started = Date.now();
+  await assert.rejects(fetchPublicPage("https://rival.test/", { get: drip, deadlineMs: 100 }), { code: "timeout" });
+  assert.ok(Date.now() - started < 1000);
+});

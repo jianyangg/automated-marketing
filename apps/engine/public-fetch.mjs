@@ -90,20 +90,27 @@ function publicLookup(hostname, options, callback) {
 }
 
 const MAX_BYTES = 5 * 1024 * 1024; // a marketing page; anything larger is not one
-const TIMEOUT_MS = 30_000;
+// Two clocks. IDLE_MS catches a server that goes silent. It resets on every
+// byte, so on its own a server dripping one byte every few seconds could hold
+// the run open forever; DEADLINE_MS is the hard cap on the whole page,
+// redirects included, which no amount of dripping extends.
+const IDLE_MS = 15_000;
+const DEADLINE_MS = 45_000;
 
 // One GET with no redirect following, returning a small fetch-like response
 // ({ ok, status, headers.get, text }) so callers and test stubs share a shape.
-export function publicGet(raw, { headers = {} } = {}) {
+// `signal` aborts the request and its body read when the caller's deadline passes.
+export function publicGet(raw, { headers = {}, signal } = {}) {
   const url = assertPublicUrl(raw);
   return new Promise((resolve, reject) => {
     const req = request(
       url,
       // identity: Node's https module does not decompress, so ask for plain bytes.
-      { method: "GET", headers: { ...headers, "accept-encoding": "identity" }, lookup: publicLookup, timeout: TIMEOUT_MS },
+      { method: "GET", headers: { ...headers, "accept-encoding": "identity" }, lookup: publicLookup, timeout: IDLE_MS, signal },
       (res) => {
         const chunks = [];
         let size = 0;
+        let ended = false;
         res.on("data", (chunk) => {
           size += chunk.length;
           if (size > MAX_BYTES) {
@@ -113,6 +120,7 @@ export function publicGet(raw, { headers = {} } = {}) {
           chunks.push(chunk);
         });
         res.on("end", () => {
+          ended = true;
           const body = Buffer.concat(chunks).toString("utf8");
           resolve({
             ok: res.statusCode >= 200 && res.statusCode < 300,
@@ -122,9 +130,14 @@ export function publicGet(raw, { headers = {} } = {}) {
           });
         });
         res.on("error", reject);
+        // A body cut off without an error event must still settle the promise,
+        // or the run would wait forever. Settling twice is a no-op.
+        res.on("close", () => {
+          if (!ended) reject(new Error("The connection closed before the page finished."));
+        });
       },
     );
-    req.on("timeout", () => req.destroy(new Error(`No response within ${TIMEOUT_MS / 1000}s.`)));
+    req.on("timeout", () => req.destroy(new Error(`No data for ${IDLE_MS / 1000}s.`)));
     req.on("error", reject);
     req.end();
   });
@@ -133,15 +146,22 @@ export function publicGet(raw, { headers = {} } = {}) {
 const MAX_REDIRECTS = 5;
 
 // Follows redirects by hand so every hop passes the same checks as the first
-// URL: still https, still a public host. `get` is injectable for tests.
-export async function fetchPublicPage(raw, { headers, get = publicGet } = {}) {
+// URL: still https, still a public host. One deadline covers every hop.
+// `get` and `deadlineMs` are injectable for tests.
+export async function fetchPublicPage(raw, { headers, get = publicGet, deadlineMs = DEADLINE_MS } = {}) {
+  const signal = AbortSignal.timeout(deadlineMs);
   let current = raw;
-  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-    assertPublicUrl(current);
-    const response = await get(current, { headers });
-    const location = response.status >= 300 && response.status < 400 ? response.headers?.get("location") : null;
-    if (!location) return response;
-    current = new URL(location, current).href;
+  try {
+    for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+      assertPublicUrl(current);
+      const response = await get(current, { headers, signal });
+      const location = response.status >= 300 && response.status < 400 ? response.headers?.get("location") : null;
+      if (!location) return response;
+      current = new URL(location, current).href;
+    }
+  } catch (error) {
+    if (signal.aborted) throw new EngineError("timeout", `${raw} did not finish within ${deadlineMs / 1000}s.`);
+    throw error;
   }
   throw new EngineError("unsafe_url", `Gave up on ${raw} after ${MAX_REDIRECTS} redirects.`);
 }
