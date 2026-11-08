@@ -9,6 +9,7 @@ Proposed execution architecture, October 13, 2026. **Implemented November 2026:*
 | `funnel.mjs` | Funnel view, metric trust checks, growth stage | Constraint = broken metric first, else lowest share of target; stage moves forward only on cited observations |
 | `bets.mjs` | Bets, tasks, costs | Max 3 running; threshold, min measured days, caps, risk and kill date fixed up front; channel levers cite a gap; verdict computed, override stated; one extension only when data is missing; money only under a spend grant within grant and bet caps; agent replies only under a reply grant within its daily cap |
 | `market.mjs` | Situations, signals, competitors, page snapshots, gaps, AI-visibility runs | Public signals need https sources; users' words need consent; behavior cites an observation; page diffs ignore markup |
+| `public-fetch.mjs` | Fetching competitor pages | Public https hosts only; the resolved address is checked at connect time and on every redirect hop; 5 MB and 30 s limits |
 | `agenda.mjs` | Owner inbox and agent agenda | Fixed ordering; owner asks age with a 2-day SLA |
 | `scorecard.mjs` | Engine performance per brand and across brands; tactic results and ranking | Counts outcomes and costs, not activity; own results lead a tactic's rank after 3 closed bets |
 

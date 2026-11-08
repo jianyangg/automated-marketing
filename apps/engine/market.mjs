@@ -3,6 +3,7 @@ import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { EngineError, assertPrintable } from "./store.mjs";
 import { DAY_MS, validAuthor } from "./funnel.mjs";
+import { assertPublicUrl, fetchPublicPage } from "./public-fetch.mjs";
 
 // Customers and competitors, as evidence a bet can point at.
 //
@@ -99,7 +100,17 @@ export function listSituations(db) {
 export function addCompetitor(db, spec, { now = new Date() } = {}) {
   const id = slug(spec.id, "id");
   if (exists(db, "competitors", id)) throw new EngineError("invalid_market", `Competitor ${id} already exists.`);
-  const urls = (spec.urls ?? []).map((url) => https(url, "url"));
+  // Refuse a private or loopback address on entry too, so a bad URL is
+  // caught when it is recorded rather than on every later watch.
+  const urls = (spec.urls ?? []).map((url) => {
+    https(url, "url");
+    try {
+      assertPublicUrl(url);
+    } catch (error) {
+      throw new EngineError("invalid_market", error.message);
+    }
+    return url;
+  });
   if (!urls.length) throw new EngineError("invalid_market", "At least one --url (homepage, pricing) is required.");
   db.prepare(
     `INSERT INTO competitors (id, name, urls, positioning, pricing, audience, channels, recorded_by, created_at)
@@ -172,8 +183,10 @@ function difference(before, after, limit = 15) {
 // Fetches every watched page, saves its visible text under
 // research/competitors/<id>/, and reports what changed since the last good
 // snapshot of the same page. A failed fetch is recorded as a failure, never
-// as "unchanged".
-export async function watchCompetitors(db, brandDir, { only, by, fetch = globalThis.fetch, now = new Date() } = {}) {
+// as "unchanged". Pages are fetched only from public https hosts, with each
+// redirect checked the same way (see public-fetch.mjs); `get` is one
+// non-redirecting GET, injectable for tests.
+export async function watchCompetitors(db, brandDir, { only, by, get, now = new Date() } = {}) {
   validAuthor(by);
   const competitors = listCompetitors(db, now).filter((c) => !only || c.id === only);
   if (only && !competitors.length) throw new EngineError("not_found", `No competitor ${only}.`);
@@ -190,10 +203,9 @@ export async function watchCompetitors(db, brandDir, { only, by, fetch = globalT
           .run(competitor.id, url, fields.status ?? null, fields.hash ?? null, fields.path ?? null, fields.error ?? null, fetchedAt);
       let response;
       try {
-        response = await fetch(url, {
+        response = await fetchPublicPage(url, {
           headers: { "user-agent": "automated-marketing-engine/1 (competitor page check)", accept: "text/html" },
-          redirect: "follow",
-          signal: AbortSignal.timeout(30_000),
+          ...(get && { get }),
         });
       } catch (error) {
         record({ error: error.message });

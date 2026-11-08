@@ -394,6 +394,13 @@ export function listTasks(db, { status, betId, executor, now = new Date() } = {}
 }
 
 export function addTask(db, spec, { now = new Date() } = {}) {
+  // One write transaction: the reply-cap count and the insert that reserves
+  // the slot must happen under the same lock, or two processes adding a reply
+  // at once could both see room under the cap and both reserve it.
+  return transaction(db, () => insertTask(db, spec, now));
+}
+
+function insertTask(db, spec, now) {
   const bet = db.prepare("SELECT status FROM bets WHERE id = ?").get(spec.betId ?? "");
   if (!bet) throw new EngineError("invalid_task", `No bet ${spec.betId}. Every task belongs to a bet.`);
   if (!["proposed", "running"].includes(bet.status))

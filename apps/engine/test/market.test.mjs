@@ -46,7 +46,7 @@ test("watch saves each page's text, reports real changes, and records failures a
   assert.equal(listCompetitors(db)[0].watchDue, true);
   const first = await watchCompetitors(db, brand, {
     by: "competitor-watcher",
-    fetch: page("<h1>Rival</h1><p>Free forever</p>"),
+    get: page("<h1>Rival</h1><p>Free forever</p>"),
     now: new Date("2026-11-01T00:00:00Z"),
   });
   assert.deepEqual(first.map((r) => r.first), [true, true]);
@@ -54,7 +54,7 @@ test("watch saves each page's text, reports real changes, and records failures a
   const second = await watchCompetitors(db, brand, {
     by: "competitor-watcher",
     // Only markup changed on the home page: not news. Pricing changed for real.
-    fetch: async (url) =>
+    get: async (url) =>
       url.endsWith("pricing")
         ? { ok: true, status: 200, text: async () => "<h1>Rival</h1><p>$8 a month</p>" }
         : { ok: true, status: 200, text: async () => "<div class='new'><h1>Rival</h1></div><p>Free forever</p><script>x()</script>" },
@@ -66,7 +66,7 @@ test("watch saves each page's text, reports real changes, and records failures a
   assert.deepEqual(second[1].removed, ["Free forever"]);
   const failed = await watchCompetitors(db, brand, {
     by: "competitor-watcher",
-    fetch: async () => ({ ok: false, status: 503, text: async () => "" }),
+    get: async () => ({ ok: false, status: 503, text: async () => "" }),
     now: new Date("2026-12-02T00:00:00Z"),
   });
   assert.deepEqual(failed.map((r) => r.error), ["HTTP 503", "HTTP 503"]);
@@ -76,7 +76,7 @@ test("watch saves each page's text, reports real changes, and records failures a
   const sameDay = await watchCompetitors(db, brand, {
     only: "rival",
     by: "competitor-watcher",
-    fetch: page("<h1>Rival</h1><p>$10 a month</p>"),
+    get: page("<h1>Rival</h1><p>$10 a month</p>"),
     now: new Date("2026-12-01T05:00:00Z"),
   });
   assert.notEqual(sameDay[1].path, second[1].path);

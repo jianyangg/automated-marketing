@@ -13,7 +13,8 @@ import { addGrant } from "../authority.mjs";
 import { observe } from "../learning.mjs";
 import { proposeBet, startBet, closeBet, extendBet, getBet, addTask, recordCost } from "../bets.mjs";
 import { dailyAverage, funnelView, recordCheck } from "../funnel.mjs";
-import { addSignal, recordVisibility } from "../market.mjs";
+import { addSignal, recordVisibility, addCompetitor, watchCompetitors } from "../market.mjs";
+import { isPublicAddress, fetchPublicPage, publicGet } from "../public-fetch.mjs";
 import { inbox } from "../agenda.mjs";
 import { config, readings, market, day } from "./funnel-fixture.mjs";
 import { fixture, yes } from "./fixture.mjs";
@@ -162,4 +163,53 @@ test("a broken engine.json does not block revoking, withdrawing or reading", asy
   assert.equal((await run("show", action.id)).id, action.id);
   assert.deepEqual(await run("inbox"), []);
   assert.equal((await run("status")).error.code, "invalid_config");
+});
+
+test("two processes adding agent replies at once cannot both take the last slot", async (t) => {
+  const { db, brand } = await fixture(t);
+  const gap = market(db);
+  const now = new Date();
+  const b = proposeBet(db, config, bet(gap, { lever: "community", killAt: day(now.toISOString(), 7).toISOString() }), { now });
+  startBet(db, b.id, { now });
+  await addGrant(db, { kind: "reply", channel: "threads", account: "sample", maxPerDay: 1, timezone: "UTC", pauseAfterFailures: 1, expiresAt: "2099-01-01", statement: "Replies" }, { confirm: yes, now });
+  const script = `import { openStore } from ${JSON.stringify(new URL("../store.mjs", import.meta.url).href)};
+    import { addTask } from ${JSON.stringify(new URL("../bets.mjs", import.meta.url).href)};
+    const db = openStore(${JSON.stringify(join(brand, ".state", "engine.sqlite"))});
+    try {
+      addTask(db, { betId: ${JSON.stringify(b.id)}, kind: "reply", title: "Answer", executor: "agent", channel: "threads", account: "sample", by: "community-scout" });
+      console.log("reserved");
+    } catch (error) {
+      console.log(error.code);
+    } finally {
+      db.close();
+    }`;
+  const run = () => promisify(execFile)(process.execPath, ["--disable-warning=ExperimentalWarning", "--input-type=module", "-e", script]);
+  const outcomes = (await Promise.all([run(), run(), run(), run()])).map((r) => r.stdout.trim()).sort();
+  assert.deepEqual(outcomes, ["daily_cap", "daily_cap", "daily_cap", "reserved"]);
+});
+
+test("competitor pages are fetched only from public https hosts, on every redirect hop", async (t) => {
+  for (const address of ["127.0.0.1", "10.1.2.3", "172.20.0.1", "192.168.1.1", "169.254.169.254", "100.64.0.1", "0.0.0.0", "::1", "fd00::1", "fe80::1", "::ffff:127.0.0.1"])
+    assert.equal(isPublicAddress(address), false, address);
+  for (const address of ["93.184.216.34", "2606:2800:220:1:248:1893:25c8:1946"]) assert.equal(isPublicAddress(address), true, address);
+
+  const { db, brand } = await fixture(t);
+  for (const url of ["https://127.0.0.1/", "https://[::1]/admin", "https://169.254.169.254/latest/meta-data/"])
+    assert.throws(() => addCompetitor(db, { id: "bad", name: "Bad", urls: [url], by: "cmo" }), { code: "invalid_market" });
+
+  // A public page that redirects somewhere unsafe is refused at that hop.
+  const redirectTo = (location) => async (url) =>
+    url === "https://rival.test/" ? { ok: false, status: 302, headers: { get: () => location }, text: async () => "" } : { ok: true, status: 200, text: async () => "secret" };
+  for (const location of ["http://rival.test/", "https://127.0.0.1/", "https://[::1]/", "https://169.254.169.254/latest/meta-data/"])
+    await assert.rejects(fetchPublicPage("https://rival.test/", { get: redirectTo(location) }), { code: "unsafe_url" }, location);
+  // A relative redirect on the same public host is fine.
+  assert.equal((await fetchPublicPage("https://rival.test/", { get: redirectTo("/pricing") })).status, 200);
+  // The real socket path checks the resolved address: localhost never connects.
+  await assert.rejects(publicGet("https://localhost/"), { code: "unsafe_url" });
+
+  // And watch records the refusal as a failed check, saving nothing.
+  addCompetitor(db, { id: "rival", name: "Rival", urls: ["https://rival.test/"], by: "cmo" });
+  const [result] = await watchCompetitors(db, brand, { by: "competitor-watcher", get: redirectTo("https://192.168.1.1/") });
+  assert.match(result.error, /not a public address/);
+  assert.equal(result.path, undefined);
 });
