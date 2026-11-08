@@ -2,6 +2,18 @@
 
 Proposed execution architecture, October 13, 2026. **Implemented November 2026:** `apps/engine/`, a dependency-free Node.js CLI over per-brand SQLite (Node's built-in `node:sqlite`) with actions, owner grants and approvals, idempotent deliveries with reconciliation, observations, decisions, a generated brief, Keychain secrets, a manual-handoff adapter, an official Threads adapter and a Mixpanel reader. The [read-only dashboard](dashboard.md) reads its generated files. Still proposed: MCP, a background worker, further connectors, and the broader record groups below.
 
+**Engine v2, November 2026** (schema v3, `apps/engine/`): the engine models the business, not only the posting queue.
+
+| Module | Holds | Key rules |
+| --- | --- | --- |
+| `funnel.mjs` | Funnel view, metric trust checks, growth stage | Constraint = broken metric first, else lowest share of target; stage moves forward only on cited observations |
+| `bets.mjs` | Bets, tasks, costs | Max 3 running; threshold, min measured days, caps, risk and kill date fixed up front; channel levers cite a gap; verdict computed, override stated; one extension only when data is missing; money only under a spend grant within grant and bet caps; agent replies only under a reply grant within its daily cap |
+| `market.mjs` | Situations, signals, competitors, page snapshots, gaps, AI-visibility runs | Public signals need https sources; users' words need consent; behavior cites an observation; page diffs ignore markup |
+| `agenda.mjs` | Owner inbox and agent agenda | Fixed ordering; owner asks age with a 2-day SLA |
+| `scorecard.mjs` | Engine performance per brand and across brands; tactic results and ranking | Counts outcomes and costs, not activity; own results lead a tactic's rank after 3 closed bets |
+
+Every agent-written row records `recorded_by`. Grants have a kind (post, reply, spend). Decision rationales are capped at 280 characters. Replay evals in `apps/engine/test/replay.test.mjs` pin the engine's judgment on known situations. Specialist roles live in `prompts/team.md`; Claude Code workflows in `.claude/workflows/` run them in parallel. Not built: paid-ad provider adapters (spend is a ledger guard; ads are placed by hand or a future adapter) and Threads reply publishing (reply tasks record the live link).
+
 ## 1. System boundary
 
 Use a local TypeScript application, SQLite, ordinary brand folders, a CLI, and a small optional worker. Codex supplies reasoning, research, writing, creative direction, and interpretation. Deterministic services own validation, transactional state, rendering, authority, external execution, and calculations.

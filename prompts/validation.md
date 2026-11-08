@@ -12,7 +12,7 @@ Record question/hypothesis, decision affected, evidence needed, method, source c
 
 1. Choose the smallest uncertainty that materially changes a marketing decision.
    If several explanations compete, use the problem-decomposition lens in `docs/research/thinking-frameworks.md`: record plausible branches, a leading provisional explanation, disconfirming evidence, and the consequential branch worth investigating. Do not collect evidence only to endorse the first hypothesis.
-2. Use `prompts/research.md` for secondary research: original published studies, public market/customer language, product documentation, and existing legitimate observations. Do not run surveys, interviews, focus groups, recruitment, or synthetic consumer panels.
+2. Use `prompts/research.md` for secondary research: original published studies, public market/customer language, product documentation, and existing legitimate observations. Conversations with real users (through the owner, with consent) and product behavior are allowed and preferred; synthetic consumer panels are not.
 3. Collect evidence with citations/date/context, access limits, and counterexamples, including satisfaction with substitutes or doing nothing. Deduplicate statements; counts describe the corpus, not the market.
 4. Use `prompts/concept-evaluation.md` for internal artifact critique where useful. It cannot fill missing demand evidence. Existing authorized distribution outcomes can inform learning; do not contact people, enter private accounts, buy data, or run paid tests without relevant authority.
 5. Separate what was proposed, attempted, observed, unavailable, and inferred. Preserve partial evidence and missing-method limits.

@@ -1,6 +1,6 @@
 # Autonomous secondary-research protocol
 
-Version 1.0 · October 13, 2026. Use existing public material and owner-supplied records. No surveys, interviews, focus groups, recruitment, or primary-data collection service is required or proposed by this framework. Reading published studies that used those methods is secondary research; recreating their data collection is outside scope.
+Version 1.0 · October 13, 2026. Use existing public material and owner-supplied records. No recruited panels, focus groups or paid data-collection service is required by this framework; conversations with a brand's own users, with consent, are covered by the [team](../../prompts/team.md) user-analyst role. Reading published studies that used those methods is secondary research; recreating their data collection is outside scope.
 
 The agent should actively use its available web search/open tools when a marketing decision needs external evidence. Do not wait for the owner to supply papers. A custom crawler, paid research product, separate LLM, or browser automation stack is not a prerequisite. This is a transparent, bounded desk review, not a claim to have conducted an exhaustive systematic review.
 

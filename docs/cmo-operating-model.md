@@ -26,7 +26,7 @@ The CMO can prepare product recommendations and implementation briefs. It does n
 
 Every artifact links backward to its evidence/decision and forward to its outcomes. A post without a campaign can be an owner-directed ad hoc item, but still needs an objective/context, truth check, and authority before execution. A validation plan is a first-class work item: question/hypothesis, required evidence, secondary method, source criteria, tasks, effort, authority needs, observations, exit condition, and decision. Research-only work records distribution as not applicable rather than inventing a publication step.
 
-Use [autonomous secondary research](research/secondary-research.md) to investigate material external unknowns with Codex's existing tools. The [evidence library](research/evidence-library.md) records methodological findings and transfer limits. Published research, selected public language, brand facts, internal judgments, and actual outcomes remain distinct. No new surveys, interviews, focus groups, recruitment, or synthetic consumer panels are part of this operating model.
+Use [autonomous secondary research](research/secondary-research.md) to investigate material external unknowns with Codex's existing tools. The [evidence library](research/evidence-library.md) records methodological findings and transfer limits. Published research, selected public language, brand facts, internal judgments, and actual outcomes remain distinct. Conversations with a brand's own real users (with consent) are first-class evidence; recruited panels, focus groups and synthetic consumer panels are not part of this operating model.
 
 ## 3. First onboarding
 

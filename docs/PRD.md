@@ -41,7 +41,7 @@ Principles:
 
 R1 requires a small transactional runtime for durable versions and decisions; it does not require a running daemon, social credentials, image-generation service, or MCP installation. Before that runtime exists, the repository remains a specification even if its templates can be read in Codex. R2 is required before claiming automated publishing or Autopilot works.
 
-Excluded: surveys, interviews, focus groups, customer recruitment, synthetic consumer panels, proprietary predictive-model training, mass cold outreach, public signup/billing, agency administration, a general CRM, a second chat application, and a mandatory infrastructure fleet. Published participant studies may inform methods; this framework does not conduct them. Research uses secondary sources and existing legitimate observations; LLMs evaluate artifacts rather than replacing sampled people.
+Excluded: recruiting research panels, focus groups, synthetic consumer panels, proprietary predictive-model training, mass cold outreach, public signup/billing, agency administration, a general CRM, a second chat application, and a mandatory infrastructure fleet. Conversations with a brand's own real users (run by the owner, with consent) and a short fit survey of existing users are in scope as of v2; published participant studies may also inform methods. LLMs evaluate artifacts rather than replacing sampled people.
 
 ## 4. First-run and ongoing journeys
 
@@ -116,7 +116,7 @@ Maintain separate product/service truth, customers/audience hypotheses, voice, v
 
 Use bounded research briefs with objective, scope, source constraints, timeframe, effort, and expected decisions. Consider customer problems, triggers, objections, substitutes, satisfied incumbent users, and doing nothing. Store citations and contradictory evidence.
 
-Use existing Codex web/search/browser capabilities proactively through FR-25–26. Keep method evidence separate from brand-market evidence. No new surveys, interviews, focus groups, recruitment, or synthetic panels.
+Use existing Codex web/search/browser capabilities proactively through FR-25–26. Keep method evidence separate from brand-market evidence. No recruited panels, focus groups or synthetic panels; the brand's own users can be asked, with consent.
 
 **Acceptance:** conclusions distinguish observation from interpretation and public-corpus counts from market prevalence. Tool/network absence produces an incomplete-research state and useful next tasks; LLM reactions cannot fill the gap.
 

@@ -17,6 +17,10 @@
 /apps/*
 !/apps/dashboard/
 !/apps/engine/
+# Shared agent workflows only; local agent settings stay private.
+!/.claude/
+/.claude/*
+!/.claude/workflows/
 
 # Owner workspaces are private; distributable fixtures live in examples/.
 /brands/*

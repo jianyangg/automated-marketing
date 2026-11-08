@@ -5,7 +5,9 @@
 | Prompt | Job |
 | --- | --- |
 | [Session start](session-start.md) | Recover state from the engine and pick the work |
-| [Daily run](daily-run.md) | Reconcile, read results, decide, propose, publish, brief |
+| [Daily run](daily-run.md) | Reconcile, read results, work the agenda and the running bets' tasks, brief |
+| [Weekly review](weekly-review.md) | Check metric trust, close due bets, find the constraint, start at most one bet |
+| [Team](team.md) | Specialist agent roles and the rules every role follows |
 | [Distribution](distribution.md) | Work out how to reach the audience for any proposal, from comparables and venues |
 | [AI visibility](ai-visibility.md) | Get recommended by AI assistants, measured as mention rate |
 | [Onboard](onboard.md) | Add an unrelated business from a private folder |

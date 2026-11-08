@@ -55,7 +55,7 @@ Academic evidence, conceptual frameworks, vendor capability descriptions, market
 
 The [evidence library](evidence-library.md) is the authoritative E01–E15 register: primary links, inspected access, publication/version status, bounded findings, transfer limits, and requirement/acceptance mapping. It covers secondary-review methods, public-language analysis and selection bias, advertising creativity, AI convergence, placement, concreteness, sharing, attribution/causality, measurement uncertainty, and LLM judging/simulation. The [consolidation search log](research-log.md) records final countersearch and version checks; it is not an exhaustive search history.
 
-Use [secondary research](secondary-research.md), [creative development](creative-development.md), and [LLM evaluation](llm-evaluation.md) as operating methods. These protocols are engineering adaptations of the evidence, not empirically validated performance guarantees. Published human studies are existing sources; no new surveys, interviews, or customer recruitment are part of this framework.
+Use [secondary research](secondary-research.md), [creative development](creative-development.md), and [LLM evaluation](llm-evaluation.md) as operating methods. These protocols are engineering adaptations of the evidence, not empirically validated performance guarantees. Published human studies are existing sources; recruited panels are not part of this framework, while a brand's own users can be asked with consent.
 
 ## Practitioner decision frameworks
 
